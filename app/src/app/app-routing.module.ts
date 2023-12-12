@@ -8,6 +8,7 @@ import { ListarPedidoComponent } from './pedido/listar-pedido/listar-pedido.comp
 import { EditarProdutoComponent } from './produto/editar-produto/editar-produto.component';
 import { InserirProdutoComponent } from './produto/inserir-produto/inserir-produto.component';
 import { ListarProdutoComponent } from './produto/listar-produto/listar-produto.component';
+import { EnviarPedidoComponent } from './cliente/enviar-pedido/enviar-pedido.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
   {
     path: 'pedido',
     component: PedidoClienteComponent
+  },
+  {
+    path: 'enviar-pedido',
+    component: EnviarPedidoComponent
   }
 ];
 

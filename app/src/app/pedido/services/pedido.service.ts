@@ -9,7 +9,7 @@ import { Produto } from 'src/app/shared/models/produto.model';
   providedIn: 'root'
 })
 export class PedidoService {
-  private backendURL = 'http://localhost:8081';
+  public static backendURL = 'http://fubi.ca:8081';
   private itensPedido: Itempedido[] = [];
   public itensPedidoSubject: BehaviorSubject<Itempedido[]> = new BehaviorSubject<Itempedido[]>([]);
   itensPedido$ = this.itensPedidoSubject.asObservable();
@@ -71,7 +71,7 @@ export class PedidoService {
 
   getUltimoIdServidor(): Promise<number> {
     // Faz a chamada HTTP GET para obter os pedidos
-    return this.http.get<any[]>(`${this.backendURL}/pedidos`).toPromise()
+    return this.http.get<any[]>(`${PedidoService.backendURL}/pedidos`).toPromise()
       .then(pedidos => {
         if (pedidos && pedidos.length > 0) {
           // Se houver pedidos, retorna o maior ID encontrado
@@ -79,7 +79,7 @@ export class PedidoService {
           return maxId;
         } else {
           // Se não houver pedidos, retorna 0
-          return 0;
+          return 1;
         }
       })
       .catch(error => {
@@ -89,16 +89,15 @@ export class PedidoService {
   }
 
   getPedido(id: number): Observable<Pedido> {
-    const url = `${this.backendURL}/pedidos/${id}`;
+    const url = `${PedidoService.backendURL}/pedidos/${id}`;
     return this.http.get<Pedido>(url);
   }
 
   enviarPedido(pedido: Pedido): void {
-    this.http.post(`${this.backendURL}/pedidos`, pedido)
+    this.http.post(`${PedidoService.backendURL}/pedidos`, pedido)
       .subscribe(
         (response: any) => {
           console.log('Pedido enviado com sucesso', response);
-          this.limparItensPedido();
         },
         (error: any) => {
           console.error('Erro ao enviar o pedido', error);
@@ -106,7 +105,7 @@ export class PedidoService {
       );
   }
 
-  private limparItensPedido(): void {
+  limparItensPedido(): void {
     this.itensPedido = [];
     this.itensPedidoSubject.next([...this.itensPedido]);
   }

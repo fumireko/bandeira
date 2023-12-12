@@ -16,6 +16,7 @@ import { ClienteComponent } from './cliente/cliente.component';
 import { ListagemClienteComponent } from './cliente/listagem-cliente/listagem-cliente.component';
 import { PedidoClienteComponent } from './cliente/pedido-cliente/pedido-cliente.component';
 import { FormsModule } from '@angular/forms';
+import { EnviarPedidoComponent } from './cliente/enviar-pedido/enviar-pedido.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { FormsModule } from '@angular/forms';
     ListarProdutoComponent,
     ClienteComponent,
     ListagemClienteComponent,
-    PedidoClienteComponent
+    PedidoClienteComponent,
+    EnviarPedidoComponent
   ],
   imports: [
     BrowserModule,

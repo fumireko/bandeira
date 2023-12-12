@@ -57,7 +57,7 @@ public class Pedido implements Serializable{
 	@Column(name="opcao_pagamento")
 	private String opcaoPagamento;
 	
-	@Column(name="url_pedido")
+	@Column(name="url_pedido", length=1024)
 	private String urlPedido;
 	
 	@OneToMany(mappedBy="pedido")

@@ -4,6 +4,7 @@ import { ProdutoService } from 'src/app/produto/services/produto.service';
 import { Itempedido } from 'src/app/shared/models/itempedido.model';
 import { FormControl, NgForm } from '@angular/forms';
 import { Pedido } from 'src/app/shared/models/pedido.model';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,11 +18,14 @@ export class PedidoClienteComponent implements OnInit{
   @ViewChild("formEntrega") formEntrega! : NgForm;
   @ViewChild("formRetirada") formRetirada! : NgForm;
   @ViewChild('container', { static: true }) container!: ElementRef;
+  static idPedido: number;
+  static urlPedido: string;
 
   constructor(
     private pedidoService: PedidoService, 
     private produtoService: ProdutoService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private router: Router
   ){}
 
   formEntregaControl!: FormControl;
@@ -98,7 +102,6 @@ export class PedidoClienteComponent implements OnInit{
   }
 
   async criarPedido(): Promise<void> {
-    
 
     const novoPedido: Pedido = {
       id: this.ultimoIdServidor,
@@ -114,14 +117,17 @@ export class PedidoClienteComponent implements OnInit{
       itens: this.getItens()
     };
   
+    novoPedido.id = this.ultimoIdServidor++;
+    console.log("criarPedido(): id " + novoPedido.id);
     this.pedidoService.enviarPedido(novoPedido);
-    this.pedidoService.getPedido(novoPedido.id - 1).subscribe((pedido: Pedido) => {
-      const novaTag = this.renderer.createElement('a');
-      this.renderer.setAttribute(novaTag, 'href', pedido.urlPedido);
-      this.renderer.appendChild(novaTag, this.renderer.createText('Ir para o Google'));
-      this.renderer.appendChild(this.container.nativeElement, novaTag);
-    });
-
+    console.log("POST /pedidos: " + JSON.stringify(novoPedido));
+    PedidoClienteComponent.idPedido = novoPedido.id;
+    console.log("GET /pedidos/" + novoPedido.id);
+    this.pedidoService.getPedido(novoPedido.id).subscribe((pedido: Pedido) => {
+      PedidoClienteComponent.urlPedido = pedido.urlPedido;
+      window.open(PedidoClienteComponent.urlPedido);
+    });    
+    this.router.navigate(['/enviar-pedido']);
   }
 
   async urlPedido(): Promise<string> {

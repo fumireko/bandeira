@@ -31,7 +31,7 @@ public class Produto implements Serializable{
 	@Column(name="preco_produto")
     private double preco;
 	
-	@Column(name="imagem_produto")
+	@Column(name="imagem_produto", length=1024)
     private String imagem;
     
     public Produto(String nome, double preco, String imagem) {
