@@ -14,7 +14,7 @@ export class EnviarPedidoComponent {
   ){}
 
   getUrl(): string{
-    return PedidoClienteComponent.urlPedido;
+    return ''
   }
 
   limpar() {

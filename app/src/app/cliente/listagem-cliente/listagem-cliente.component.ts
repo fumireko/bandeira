@@ -22,7 +22,7 @@ export class ListagemClienteComponent {
   }
 
   carregarProdutos(){
-    this.produtoService.getProdutos().subscribe(
+    this.produtoService.listarTodos().subscribe(
       (data) => {this.produtos = data},
       (error) => {console.error("Erro ao carregar os produtos");}
     );

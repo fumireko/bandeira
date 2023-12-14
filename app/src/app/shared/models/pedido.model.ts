@@ -2,7 +2,6 @@ import { Itempedido } from "./itempedido.model";
 
 export class Pedido {
     constructor(
-        public id: number,
         public cidade: String,
         public logradouro: String,
         public numero_predial: String,
