@@ -40,61 +40,6 @@ export class PedidoService {
   }
 
   marcarEntregue(pedido: Pedido): Observable<Pedido> {
-    return this.http.put<Pedido>(`${AppComponent.backendURL}/pedidos/${pedido.id}/entregue`, pedido);
-  }
-
-  adicionarItemPedido(pedido: Pedido, produto: Produto) {
-    const pe = this.pedidos.find(p => p.id === pedido.id);
-
-    if (pe) {
-      const itemExistente = pe.itens?.find(item => item.produto?.id === produto.id);
-
-      if (itemExistente) itemExistente.quantidade = (itemExistente.quantidade ?? 0) + 1;
-      else {
-        const novoItem: ItemPedido = {
-          quantidade: 1,
-          produto: produto,
-        };
-        pe.itens?.push(novoItem);
-      }
-
-      this.pedidosSubject.next([...this.pedidos]);
-      console.log(JSON.stringify(this.pedidos));
-    } else {
-      console.error('Pedido não encontrado');
-    }
-  }
-
-  removerItemPedido(pedido: Pedido, produto: Produto) {
-    const pe = this.pedidos.find(p => p.id === pedido.id);
-  
-    if (pe) {
-      const itemExistente = pe.itens?.find(item => item.produto?.id === produto.id);
-  
-      if (itemExistente) {
-        itemExistente.quantidade = (itemExistente.quantidade ?? 0) - 1;
-  
-        if (itemExistente.quantidade <= 0) pe.itens = pe.itens?.filter(item => item.produto?.id !== produto.id);
-        
-        this.pedidosSubject.next([...this.pedidos]);
-        console.log(JSON.stringify(this.pedidos));
-      } else {
-        console.error('Item do pedido não encontrado');
-      }
-    } else {
-      console.error('Pedido não encontrado');
-    }
-  }  
-
-  limparItensPedido(pedidoId: number): void {
-    const pedido = this.pedidos.find(p => p.id === pedidoId);
-
-    if (pedido) {
-      pedido.itens = [];
-      this.pedidosSubject.next([...this.pedidos]);
-      console.log(JSON.stringify(this.pedidos));
-    } else {
-      console.error('Pedido não encontrado');
-    }
+    return this.http.put<Pedido>(`${AppComponent.backendURL}/pedidos/${pedido.id}/entregar`, pedido);
   }
 }

@@ -194,7 +194,10 @@ public class Pedido implements Serializable{
 	}
 	
 	public void setEntregue(boolean entregue) {
-		if(entregue) this.dataEntregue = LocalDateTime.now();
+		if(entregue) {
+			System.out.println("true");
+			this.dataEntregue = LocalDateTime.now();
+		}
 		else this.entregue = entregue;
 	}
 }

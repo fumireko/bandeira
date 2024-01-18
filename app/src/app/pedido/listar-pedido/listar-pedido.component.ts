@@ -49,12 +49,18 @@ export class ListarPedidoComponent implements OnInit {
 
   remover(pedido: Pedido) {
     if (window.confirm(`Marcar o pedido ${pedido.id} como entregue?`)) {
-      this.pedidoService.marcarEntregue(pedido).subscribe(() => {
-        this.gerarListagem().subscribe(pedidos => {
-          this.pedidos = pedidos;
-          this.filtrados = this.pedidos;
-        });
-      });
+      this.pedidoService.marcarEntregue(pedido).subscribe(
+        (pedidoInserido) => {
+          console.log('Pedido marcado como entregue:', pedidoInserido);
+          this.gerarListagem().subscribe(pedidos => {
+            this.pedidos = pedidos;
+            this.filtrados = this.pedidos;
+          });
+        },
+        (error) => {
+          console.error('Erro ao marcar como entregue:', error);
+        }        
+      );
     }
   }
   

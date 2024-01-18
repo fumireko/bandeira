@@ -5,7 +5,7 @@ export class Pedido {
         public id?: number,
         public cidade?: string,
         public logradouro?: string,
-        public numero_predial?: string,
+        public numeroPredial?: string,
         public bairro?: string,
         public referencia?: string,
         public nome_cliente?: string,

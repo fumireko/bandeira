@@ -27,10 +27,6 @@ export class ProdutoService {
     return this.http.get<Produto>(`${AppComponent.backendURL}/produtos/${id}`);
   }
 
-  buscarPorCategoria(id: number | undefined): Observable<Produto[]>{
-    return this.http.get<Produto[]>(`${AppComponent.backendURL}/produtos?categoria=${id}`);
-  }
-
   atualizar(produto: Produto): Observable<Produto> {
     return this.http.put<Produto>(`${AppComponent.backendURL}/produtos/${produto.id}`, produto);
   }

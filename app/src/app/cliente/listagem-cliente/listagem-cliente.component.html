@@ -1,28 +1,145 @@
-
-<div class="d-flex justify-content-center mx-auto" style="width: 70vw">
-  <div class="row w-100">
-    <div class="accordion mt-3" id="accordion">
-      <div *ngFor="let categoria of categorias" class="accordion-item">
-        {{ filtrarCategoria(categoria.id) }}
-        <h2 class="accordion-header">
-          <button class="accordion-button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + categoria.id">
-            {{categoria.descricao}}
-          </button>
-        </h2>
-        <div [id]="'collapse' + categoria.id" class="accordion-collapse collapse show" data-bs-parent="#accordion">
-          <div class="accordion-body row row-cols-3 row-cols-md-3 g-4">
-            <div *ngFor="let produto of filtrados">
-                  <div class="col card">
-                    <img src="{{produto.imagem}}" alt="{{produto.nome}}" class="card-img-top">
-                    <div class="card-body">
-                      <h5 class="card-title">{{produto.nome}}</h5>
-                      <p class="card-text">{{produto.preco}}</p>
-                    </div>
-                  </div>
+<div id="content" *ngIf="urlPedido === ''">
+  <h1 *ngIf="!finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3" id="topo">Produtos</h1>
+  <hr *ngIf="!finalizarPedido">
+  
+  <div *ngIf="temItens() && !finalizarPedido"  class="position-fixed top-100 start-50 translate-middle pb-5 mb-5" style="z-index: 99">
+    <a class="btn btn-circle btn-success" href="#carrinho" (click)="finalizarPedido = true">
+      <i class="fa fa-cart-shopping"></i> Finalizar pedido
+    </a>
+  </div>
+  
+  <div *ngIf="!finalizarPedido" class="d-flex justify-content-center mx-auto">
+    <div class="row w-100">
+      <div class="accordion w-100" id="accordion">
+        <div *ngFor="let categoria of categorias" class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + categoria.id">
+              {{categoria.descricao}}
+            </button>
+          </h2>
+          <div [id]="'collapse' + categoria.id" class="accordion-collapse collapse show" data-bs-parent="#accordion">
+            <div class="accordion-body row row-cols-2 row-cols-md-0 g-3">
+              <div class="col card" *ngFor="let produto of produtosCategoria[checkUndefined(categoria.id)]">
+                <img src="{{produto.imagem}}" class="card-img-top img-fluid">
+                <div class="card-body px-1 m-0">
+                  <h5 class="card-title">R{{produto.preco | currency}}</h5>
+                  <p class="card-text">{{produto.nome}}</p>
+                  <p *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="fw-bold">{{ getQuantidade(produto) }} itens selecionados</p>
+                  <button class="btn btn-primary" (click)="adicionar(produto)">
+                    <i class="fa-solid fa-basket-shopping"></i> Adicionar
+                  </button>
+                  <button *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="btn btn-danger" (click)="remover(produto)">
+                    <i class="fa-solid fa-trash"></i> Remover
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>     
+      </div>     
+    </div>
   </div>
+  
+  <h1 *ngIf="!finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3" id="carrinho">Carrinho</h1>
+  <h1 *ngIf="finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3" id="carrinho">Pedido</h1>
+  <hr>
+  
+  <table class="table table-bordered table-hover mb-5 pb-5">
+    <tbody>
+        <tr class="text-center">
+          <th>Quantidade</th>
+          <th>Produto</th>
+          <th>Preço</th>
+        </tr>
+        <tr *ngFor="let item of itens" class="text-center">
+          <td>{{ item.quantidade }}</td>
+          <td>{{ item.produto?.nome }}</td>
+          <td>{{ item.produto?.preco }}</td>
+        </tr>
+        <tr class="fw-bold">
+          <td colspan="2">Total</td>
+          <td>R{{ subtotal(itens) | currency }}</td>
+        </tr>
+    </tbody>
+  </table>
+  
+  <p *ngIf="!temItens()" class="text-center">Seu carrinho está vazio.</p>
+  <div class="d-flex justify-content-center">
+    <form *ngIf="finalizarPedido" #formPedido="ngForm" (ngSubmit)="enviarPedido()" class="mx-2" style="width: 85vw;">
+  
+      <h2 class="mx-auto text-center mb-5">Dados do pedido</h2>
+      
+      <label for="opcaoPagamento">Forma de pagamento:</label>
+      <select name="opcaoPagamento" id="opcaoPagamento" class="form-select" [(ngModel)]="pedido.opcaoPagamento" #opcaoPagamento="ngModel">
+        <option value="cartao">Cartão de crédito/débito</option>
+        <option value="pix">PIX</option>
+        <option value="dinheiro">Dinheiro</option>
+      </select>
+      <div *ngIf="opcaoPagamento.errors && (opcaoPagamento.dirty || opcaoPagamento.touched)" class="alert alert-danger">
+        <div [hidden]="!opcaoPagamento.errors['required']">Escolha uma forma de pagamento.</div>
+      </div>
+  
+      <label for="logradouro">Endereço:</label>
+      <div class="input-group">
+          <input type="text" class="form-control" id="logradouro" name="logradouro" [(ngModel)]="pedido.logradouro" #logradouro="ngModel" minlength="3" placeholder="Rua 1" required>
+          <span class="input-group-text">Nº</span>
+          <input type="number" class="form-control" id="numeroPredial" name="numeroPredial" [(ngModel)]="pedido.numeroPredial" #numeroPredial="ngModel" placeholder="123" required> 
+      </div>
+      <div *ngIf="logradouro.errors && (logradouro.dirty || logradouro.touched)" class="alert alert-danger">
+        <div [hidden]="!logradouro.errors['required']">Digite o logradouro.</div>
+        <div [hidden]="!logradouro.errors['minlength']">O logradouro deve conter pelo menos 3 caracteres.</div>
+      </div>
+      <div *ngIf="numeroPredial.errors && (numeroPredial.dirty || numeroPredial.touched)" class="alert alert-danger">
+          <div [hidden]="!numeroPredial.errors['required']">Digite o número predial.</div>
+      </div>
+    
+      <label for="bairro">Bairro:</label>
+      <input type="text" class="form-control" id="bairro" name="bairro" [(ngModel)]="pedido.bairro" #bairro="ngModel" minlength="2" required>
+      <div *ngIf="bairro.errors && (bairro.dirty || bairro.touched)" class="alert alert-danger">
+          <div [hidden]="!bairro.errors['required']">Digite o bairro.</div>
+          <div [hidden]="!bairro.errors['minlength']">O bairro deve conter pelo menos 3 caracteres.</div>
+      </div>
+      
+      <label for="cidade">Cidade:</label>
+      <select name="cidade" id="cidade" class="form-select" [(ngModel)]="pedido.cidade" #cidade="ngModel" required>
+        <option value="Rio Branco do Sul">Rio Branco do Sul</option>
+        <option value="Itaperuçu">Itaperuçu</option>
+        <option value="Almirante Tamandaré">Almirante Tamandaré</option>
+      </select>
+      <div *ngIf="cidade.errors && (cidade.dirty || cidade.touched)" class="alert alert-danger">
+        <div [hidden]="!cidade.errors['required']">Escolha uma cidade.</div>
+      </div>
+    
+      <label for="referencia">Referência:</label>
+      <input type="text" class="form-control" id="referencia" name="referencia" [(ngModel)]="pedido.referencia" #referencia="ngModel" minlength="3">
+      <div *ngIf="referencia.errors && (referencia.dirty || referencia.touched)" class="alert alert-danger">
+          <div [hidden]="!referencia.errors['minlength']">O ponto de referência deve conter pelo menos 3 caracteres.</div>
+      </div>
+    
+      <label for="nome_cliente">Nome:</label>
+      <input type="text" class="form-control" id="nome_cliente" name="nome_cliente" [(ngModel)]="pedido.nome_cliente" #nome_cliente="ngModel" minlength="2" required>
+      <div *ngIf="nome_cliente.errors && (nome_cliente.dirty || nome_cliente.touched)" class="alert alert-danger">
+          <div [hidden]="!nome_cliente.errors['required']">Digite o nome.</div>
+          <div [hidden]="!nome_cliente.errors['minlength']">O nome deve conter pelo menos 2 caracteres.</div>
+      </div>
+    
+      <label for="tel_cliente">Telefone:</label>
+      <input type="text" class="form-control" id="tel_cliente" name="tel_cliente" [(ngModel)]="pedido.tel_cliente" #tel_cliente="ngModel" minlength="8" pattern="[0-9()\s-]+" required>
+      <div *ngIf="tel_cliente.errors && (tel_cliente.dirty || tel_cliente.touched)" class="alert alert-danger">
+          <div [hidden]="!tel_cliente.errors['required']">Digite o telefone.</div>
+          <div [hidden]="!tel_cliente.errors['minlength']">O telefone deve conter pelo menos 8 caracteres.</div>
+          <div [hidden]="!tel_cliente.errors['pattern']">Número de telefone inválido.</div>
+      </div>
+  
+      <button type="submit" class="btn btn-primary col-12 mt-3 mb-5 py-3" [disabled]="!formPedido.valid">Enviar pedido</button>
+    
+    </form>
+  </div>
+</div>
+
+<div class="d-flex justify-content-center mt-3 mx-5" *ngIf="urlPedido != ''">
+  <a href="{{ urlPedido }}" class="btn btn-success">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-100 my-2" style="fill: white" width="24" height="24" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+    Clique novamente para enviar o pedido por WhatsApp
+  </a>
 </div>

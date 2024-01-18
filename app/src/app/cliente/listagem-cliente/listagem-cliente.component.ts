@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, forkJoin } from 'rxjs';
 import { Categoria } from 'src/app/shared/models/categoria.model';
@@ -15,47 +16,108 @@ import { ProdutoService } from 'src/app/shared/services/produto.service';
   styleUrls: ['./listagem-cliente.component.css']
 })
 export class ListagemClienteComponent {
+  @ViewChild("formPedido") formPedido!: NgForm;
   @Input() produto?: Produto;
   produtos: Produto[] = [];
-  filtrados: Produto[] = [];
   categorias: Categoria[] = [];
+  produtosCategoria: Produto[][] = [];
+  finalizarPedido: boolean = false;
+  urlPedido: string | undefined = "";
+
   pedido: Pedido = new Pedido();
-  itemPedido: ItemPedido = new ItemPedido();
+  itens: ItemPedido[] = [];
 
   constructor(private router: Router, 
               private pedidoService: PedidoService, 
               private produtoService: ProdutoService,
               private categoriaService: CategoriaService){}
 
-  ngOnInit(){
-    this.itemPedido.pedido = this.pedido;
-    this.produtoService.listarTodos().subscribe(
-      (data) => {this.produtos = data},
-      (error) => {console.error("Erro ao carregar os produtos");}
-    );
+  ngOnInit() {
     this.categoriaService.listarTodas().subscribe(
-      (data) => {this.categorias = data},
-      (error) => {console.error("Erro ao carregar as categorias");}
+      (data) => {
+        this.categorias = data;
+        for (let categoria of this.categorias) {
+          this.produtoService.listarTodos(categoria.id).subscribe(
+            (produtos) => {
+              if(categoria.id) this.produtosCategoria[categoria.id] = produtos;
+            },
+            (error) => {
+              console.error(`Erro ao carregar produtos da categoria ${categoria.id}`);
+            }
+          );
+        }
+      },
+      (error) => {
+        console.error("Erro ao carregar as categorias");
+      }
     );
   }
 
+  enviarPedido() {
+    if (this.formPedido.valid) {
+      this.pedido.itens = this.itens;
+      this.pedidoService.inserir(this.pedido).subscribe(
+        (pedidoInserido) => {
+          console.log('Pedido inserido com sucesso:', pedidoInserido);
+          this.urlPedido = pedidoInserido.urlPedido;
+        },
+        (error) => {
+          console.error('Erro ao inserir pedido:', error);
+        }
+      );
+    }
+  }
+  
+
   adicionar(produto: Produto){
-    this.pedidoService.adicionarItemPedido(this.pedido, produto);
+    const item = this.itens?.find(
+      item => item.produto?.id === produto.id
+    );
+    
+    if (item) item.quantidade = (item.quantidade ?? 0) + 1; 
+
+    else {
+      this.itens?.push({
+          quantidade: 1,
+          produto: produto,
+      });
+    }
   }
 
   remover(produto: Produto){
-    this.pedidoService.removerItemPedido(this.pedido, produto);
+    const item = this.itens?.find(
+      item => item.produto?.id === produto.id
+    );
+
+    if (item) item.quantidade = (item.quantidade ?? 0) - 1;
+
+    else this.itens.filter(
+      item => item.produto?.id !== produto.id
+    );
+
+    console.log(JSON.stringify(this.itens));
   }
 
-  filtrarCategoria(id: number | undefined){
-    this.produtoService.buscarPorCategoria(id).subscribe(
-      (data) => {this.filtrados = data}
+  selecionarCategoria(id: number | undefined){
+    this.produtoService.listarTodos(id).subscribe(
+      (data) => {console.log(data)}
     )
   }
 
   getQuantidade(produto: Produto){
-    return this.pedido.itens?.find(item => item.produto === produto)?.quantidade;
+    return this.itens?.find(item => item.produto === produto)?.quantidade;
   }
 
-  temItens = (): boolean => this.produtos.length > 0;
+  subtotal(itens: ItemPedido[]): number {
+    return itens.reduce((total, item) => {
+      const precoProduto = item.produto?.preco || 0; // Certifica-se de que o preço não seja nulo ou indefinido
+      return total + (precoProduto * item.quantidade);
+    }, 0);
+  }  
+
+  temItens(): boolean {
+    return this.itens ? this.itens.length > 0 : false;
+  }
+
+  checkUndefined(a: any) {if(a) return a;}
 }
