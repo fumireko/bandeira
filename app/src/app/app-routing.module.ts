@@ -7,6 +7,7 @@ import { EditarCategoriaComponent } from './categoria/editar-categoria/editar-ca
 import { InserirCategoriaComponent } from './categoria/inserir-categoria/inserir-categoria.component';
 import { ListarCategoriaComponent } from './categoria/listar-categoria/listar-categoria.component';
 import { ListarPedidoComponent } from './pedido/listar-pedido/listar-pedido.component';
+import { ListagemClienteComponent } from './cliente/listagem-cliente/listagem-cliente.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'pedidos',
     component: ListarPedidoComponent
+  },
+  {
+    path: '',
+    component: ListagemClienteComponent
   }
 ];
 

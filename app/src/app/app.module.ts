@@ -13,6 +13,8 @@ import { ListarCategoriaComponent } from './categoria/listar-categoria/listar-ca
 import { InserirCategoriaComponent } from './categoria/inserir-categoria/inserir-categoria.component';
 import { ListarPedidoComponent } from './pedido/listar-pedido/listar-pedido.component';
 import { EditarPedidoComponent } from './pedido/editar-pedido/editar-pedido.component';
+import { ListagemClienteComponent } from './cliente/listagem-cliente/listagem-cliente.component';
+import { PedidoClienteComponent } from './cliente/pedido-cliente/pedido-cliente.component';
 
 
 @NgModule({
@@ -26,6 +28,8 @@ import { EditarPedidoComponent } from './pedido/editar-pedido/editar-pedido.comp
     InserirCategoriaComponent,
     ListarPedidoComponent,
     EditarPedidoComponent,
+    ListagemClienteComponent,
+    PedidoClienteComponent,
   ],
   imports: [
     BrowserModule,

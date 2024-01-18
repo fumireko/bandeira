@@ -6,6 +6,6 @@ export class ItemPedido {
         public id?: number,
         public pedido?: Pedido,
         public produto?: Produto,
-        public quantidade?: number
+        public quantidade: number = 0
     ){}
 }
