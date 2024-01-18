@@ -1,0 +1,27 @@
+<h1 class="text-center titulo-tela my-5">Editar Categoria</h1>
+<div *ngIf="categoria" class="well d-flex justify-content-center">
+    <form #formCategoria="ngForm" class="w-50">
+    
+        <div class="form-group mb-3">
+            <label for="descricao">Descrição da categoria:</label>
+            <input type="text" class="form-control" id="descricao" name="descricao" [(ngModel)]="categoria.descricao" #descricao="ngModel"
+                [value]="categoria.descricao" minlength="2" required>
+            <div *ngIf="descricao.errors && (descricao.dirty || descricao.touched)" class="alert alert-danger">
+                <div [hidden]="!descricao.errors['required']">Digite a descrição da categoria</div>
+                <div [hidden]="!descricao.errors['minlength']">A descrição deve conter pelo menos 2 caracteres.</div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group mb-3 d-flex justify-content-center row">
+            <button type="button" class="btn-primary btn col-3 me-1"
+                [disabled]="!formCategoria.form.valid" (click)="atualizar()">
+                <i class="fa fa-check" aria-hidden="true"></i> Editar
+            </button>
+            <a class="btn-secondary btn col-3" [routerLink]="['../../']" >
+                <i class="fa fa-arrow-left" aria-hidden="true"></i> Voltar
+            </a>
+        </div>
+    </form>
+</div>

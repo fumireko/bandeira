@@ -1,0 +1,41 @@
+<body>
+    <h1 style="width: 70vw;" class="mx-auto text-start my-5">Listagem de Categorias</h1>
+
+    <table class="table table-bordered table-hover mx-auto" style="width: 70vw;">
+        <tbody>
+            <tr class="text-center">
+                <th (click)="alternarOrdem('id')">
+                    Código
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'id'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'id' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'id' && !ordemAscendente"></i>
+                </th>
+                <th (click)="alternarOrdem('nome')">
+                    Descrição
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'nome'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'nome' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'nome' && !ordemAscendente"></i>
+                </th>
+                <th class="text-center">
+                    <a [routerLink]="['./inserir']" class="btn-success btn">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
+                </th>
+            </tr>
+            <tr *ngFor="let categoria of filtradas" class="text-center">
+              <td>{{categoria.id}}</td>
+              <td>{{categoria.descricao}}</td>
+              <td class="d-flex justify-content-evenly">
+                  <a [routerLink]="['./editar', categoria.id]" class="btn-primary btn col-6 me-1">
+                      <i class="fa fa-edit" aria-hidden="true"></i>
+                  </a>
+                  <br>
+                  <a (click)="remover(categoria)" class="btn-danger btn col-6">
+                      <i class="fa fa-times" aria-hidden="true"></i>
+                  </a>
+              </td>
+            </tr>
+        </tbody>
+    </table>
+    <p *ngIf="categorias.length==0" class="text-center">Nenhum produto cadastrado.</p>
+</body>

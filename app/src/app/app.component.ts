@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Mercado Bandeira';
-  public static backendURL = 'http://fubi.ca:8081';
+  public static backendURL = 'http://localhost:8081';
 }

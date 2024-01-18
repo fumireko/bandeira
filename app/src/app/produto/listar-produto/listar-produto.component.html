@@ -1,30 +1,82 @@
-<table class="table table-striped table-bordered table-hover">
-    <tbody>
-        <tr>
-            <th>Imagem</th>
-            <th>Descrição</th>
-            <th>Preço</th>
-            <th class="text-center">
-                <a [routerLink]="['produtos/novo']" title="Novo" alt="Novo" class="btn btn-xs btn-success">
-                    <i class="fa fa-plus" aria-hidden="true"></i> Novo
-                </a>
-            </th>
-        </tr>
-        <tr *ngFor="let produto of produtos">
-            <td>
-                <img src="{{ produto.imagem }}" alt="Imagem do Produto" class="img-fluid">
-            </td>
-            <td>{{ produto.nome }}</td>
-            <td>{{ produto.preco }}</td>
-            <td class="text-center">
-                <a [routerLink]="['produtos/editar']" title="Editar" alt="Editar" class="btn btn-xs btn-primary">
-                    <i class="fa fa-edit" aria-hidden="true"></i> Editar
-                </a>
-                <a [routerLink]="['produtos/remover']" title="Remover" alt="Remover" class="btn btn-xs btn-danger">
-                    <i class="fa fa-times" aria-hidden="true"></i> Remover
-                </a>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<p class="text-center" *ngIf="produtos?.length === 0">Nenhum produto cadastrado.</p>
+<body>
+    <h1 style="width: 70vw;" class="mx-auto text-start mt-5">Listagem de Produtos</h1>
+
+    <div class="row mx-auto" style="width: 70vw;">
+        <div class="mb-5 mx-auto" style="width: 35vw;">
+            <div class="form-check m-0 pt-3">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="mostrarImagens">
+                <label class="form-check-label" for="chkExibirImagens">Exibir Imagens</label>
+            </div>
+        </div>
+    
+        <div class="mb-5 mx-auto input-group" style="width: 35vw;">
+            <input type="text" class="form-control mt-2" style="width: 67%" placeholder="Buscar produtos"
+            [(ngModel)]="termoBusca" (input)="filtrarProdutos()">
+            <select class="form-select mt-2" id="categoria" name="categoria" style="width: 33%" [(ngModel)]="categoriaDescricao" (change)="filtrarProdutos()">
+                <option value="">Todas as categorias</option>
+                <option *ngFor="let categoria of categorias" [value]="categoria.descricao">{{categoria.descricao}}</option>
+            </select>              
+        </div>
+    </div>
+
+    <table class="table table-bordered table-hover mx-auto" style="width: 70vw;">
+        <tbody>
+            <tr class="text-center">
+                <th (click)="alternarOrdem('id')">
+                    Código
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'id'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'id' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'id' && !ordemAscendente"></i>
+                </th>
+                <th *ngIf="mostrarImagens" (click)="alternarOrdem('imagem')">
+                    Imagem
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'imagem'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'imagem' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'imagem' && !ordemAscendente"></i>
+                </th>
+                <th (click)="alternarOrdem('nome')">
+                    Descrição
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'nome'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'nome' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'nome' && !ordemAscendente"></i>
+                </th>
+                <th (click)="alternarOrdem('categoria.descricao')">
+                    Categoria
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'categoria.descricao'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'categoria.descricao' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'categoria.descricao' && !ordemAscendente"></i>
+                </th>
+                <th (click)="alternarOrdem('preco')">
+                    Preço
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'preco'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'preco' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'preco' && !ordemAscendente"></i>
+                </th>
+                <th class="text-center">
+                    <a [routerLink]="['./inserir']" class="btn-success btn">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
+                </th>
+            </tr>
+            <tr *ngFor="let produto of filtrados" class="text-center">
+              <td>{{produto.id}}</td>
+              <td *ngIf="mostrarImagens">
+                <span class="text-danger fw-bold"><img *ngIf="produto.imagem" [src]="produto.imagem" alt="Imagem inválida" class="img-fluid"></span>
+              </td>              
+              <td class="text-start">{{produto.nome}}</td>
+              <td>{{produto.categoria?.descricao}}</td>
+              <td>R{{produto.preco | currency }}</td>
+              <td class="d-flex justify-content-evenly">
+                  <a [routerLink]="['./editar', produto.id]" class="btn-primary btn col-6 me-1">
+                      <i class="fa fa-edit" aria-hidden="true"></i>
+                  </a>
+                  <br>
+                  <a (click)="remover(produto)" class="btn-danger btn col-6">
+                      <i class="fa fa-times" aria-hidden="true"></i>
+                  </a>
+              </td>
+            </tr>
+        </tbody>
+    </table>
+    <p *ngIf="produtos.length==0" class="text-center">Nenhum produto cadastrado.</p>
+</body>

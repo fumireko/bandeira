@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import live.chambando.ws.model.Categoria;
 import live.chambando.ws.model.Pedido;
 import live.chambando.ws.model.Produto;
 import live.chambando.ws.model.dto.PedidoDTO;
 import live.chambando.ws.model.dto.ProdutoDTO;
+import live.chambando.ws.repository.CategoriaRepository;
 import live.chambando.ws.repository.ProdutoRepository;
 
 import java.util.ArrayList;
@@ -24,14 +26,32 @@ public class ProdutoREST {
 	private ProdutoRepository produtoRepository;
 	
 	@Autowired
+	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
 	private ModelMapper mapper;
 
-    @GetMapping("/produtos")
-    public List<ProdutoDTO> obterTodosProdutos() {
-        List<Produto> lista = produtoRepository.findAll();
-        return lista.stream().map(e -> mapper.map(e, ProdutoDTO.class)).collect(Collectors.toList());
-    }
+	@GetMapping("/produtos")
+	public ResponseEntity<List<ProdutoDTO>> obterProdutos(@RequestParam(name = "categoria", required = false) Long categoriaId) {
+	    if (categoriaId != null) {
+	        Optional<Categoria> categoriaOptional = categoriaRepository.findById(categoriaId);
+	        if (categoriaOptional.isEmpty())
+	            return ResponseEntity.notFound().build();
 
+	        List<ProdutoDTO> produtosDTO = produtoRepository.findByCategoria(categoriaOptional.get()).stream()
+	                .map(produto -> mapper.map(produto, ProdutoDTO.class))
+	                .collect(Collectors.toList());
+
+	        return ResponseEntity.ok(produtosDTO);
+	    } else {
+	        List<ProdutoDTO> produtosDTO = produtoRepository.findAll().stream()
+	                .map(produto -> mapper.map(produto, ProdutoDTO.class))
+	                .collect(Collectors.toList());
+
+	        return ResponseEntity.ok(produtosDTO);
+	    }
+	}
+    
     @GetMapping("/produtos/{id}")
     public ResponseEntity<Produto> obterProdutoPorId(@PathVariable("id") int id) {
         return produtoRepository.findById((long) id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
@@ -53,6 +73,7 @@ public class ProdutoREST {
             produtoExistente.setNome(produtoAtualizado.getNome());
             produtoExistente.setPreco(produtoAtualizado.getPreco());
             produtoExistente.setImagem(produtoAtualizado.getImagem());
+            produtoExistente.setCategoria(produtoAtualizado.getCategoria());
            	produtoRepository.save(produtoExistente);
 	        ProdutoDTO produtoDTO = mapper.map(produtoExistente, ProdutoDTO.class);
 	

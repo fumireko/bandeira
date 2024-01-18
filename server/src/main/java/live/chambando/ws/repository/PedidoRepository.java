@@ -10,5 +10,5 @@ import live.chambando.ws.model.Pedido;
 public interface PedidoRepository extends JpaRepository<Pedido, Long>{
 	
 	Pedido findByTelCliente(String telCliente);
-
+	
 }

@@ -1,1 +1,83 @@
-<p>listar-pedido works!</p>
+<body>
+    <h1 style="width: 70vw;" class="mx-auto text-start my-5">Listagem de Pedidos</h1>
+
+    <table class="table table-bordered table-hover mx-auto" style="width: 70vw;">
+        <tbody>
+            <tr class="text-center">
+                <th (click)="alternarOrdem('id')">
+                    Código
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'id'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'id' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'id' && !ordemAscendente"></i>
+                </th>
+                <th (click)="alternarOrdem('logradouro')">
+                    Endereço
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'logradouro'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'logradouro' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'logradouro' && !ordemAscendente"></i>
+                </th>
+                <th (click)="alternarOrdem('cidade')">
+                    Cidade
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'cidade'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'cidade' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'cidade' && !ordemAscendente"></i>
+                </th>
+                <th (click)="alternarOrdem('nome_cliente')">
+                    Nome
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'nome_cliente'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'nome_cliente' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'nome_cliente' && !ordemAscendente"></i>
+                </th>               
+                <th (click)="alternarOrdem('tel_cliente')">
+                    Telefone
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'tel_cliente'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'tel_cliente' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'tel_cliente' && !ordemAscendente"></i>
+                </th>
+                <th (click)="alternarOrdem('opcaoPagamento')">
+                    Pagamento
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'opcaoPagamento'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'opcaoPagamento' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'opcaoPagamento' && !ordemAscendente"></i>
+                </th>
+                <th (click)="alternarOrdem('data_criado')">
+                    Data
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'data_criado'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'data_criado' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'data_criado' && !ordemAscendente"></i>
+                </th>
+                <th (click)="alternarOrdem('entregue')">
+                    Entregue
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'entregue'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'entregue' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'entregue' && !ordemAscendente"></i>
+                </th>
+                <th class="text-center">
+                    <a [routerLink]="['./inserir']" class="btn-success btn">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
+                </th>
+            </tr>
+            <tr *ngFor="let pedido of filtrados" class="text-center">
+              <td>{{pedido.id}}</td>
+              <td>{{pedido.logradouro}}, {{pedido.numero_predial}} - {{pedido.bairro}}</td>
+              <td>{{pedido.cidade}}</td>
+              <td>{{pedido.nome_cliente}}</td>
+              <td>{{pedido.tel_cliente}}</td>
+              <td>{{pedido.opcaoPagamento}}</td>
+              <td>{{pedido.data_criado}}</td>
+              <td>{{ pedido.entregue ? pedido.data_entregue : 'Não entregue' }}</td>
+              <td class="d-flex justify-content-evenly">
+                  <a [routerLink]="['./editar', pedido.id]" class="btn-primary btn col-6 me-1">
+                      <i class="fa fa-edit" aria-hidden="true"></i>
+                  </a>
+                  <br>
+                  <a (click)="remover(pedido)" class="btn-success btn col-6">
+                      <i class="fa fa-check" aria-hidden="true"></i>
+                  </a>
+              </td>
+            </tr>
+        </tbody>
+    </table>
+    <p *ngIf="pedidos.length==0" class="text-center">Nenhum pedido cadastrado.</p>
+</body>

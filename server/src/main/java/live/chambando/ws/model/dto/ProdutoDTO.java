@@ -1,6 +1,9 @@
 package live.chambando.ws.model.dto;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
+import live.chambando.ws.model.Categoria;
 
 public class ProdutoDTO implements Serializable{
 	
@@ -12,11 +15,15 @@ public class ProdutoDTO implements Serializable{
     private String nome;
     private double preco;
     private String imagem;
+    private Categoria categoria;
+    private LocalDateTime dataCriado;
+    private LocalDateTime dataEntregue;
     
-    public ProdutoDTO(String nome, double preco, String imagem) {
+    public ProdutoDTO(String nome, double preco, String imagem, Categoria categoria) {
 		this.setNome(nome);
 		this.setPreco(preco);
 		this.setImagem(imagem);
+		this.setCategoria(categoria);
 	}
     
     public ProdutoDTO() {
@@ -46,5 +53,23 @@ public class ProdutoDTO implements Serializable{
 	}
 	public void setImagem(String imagem) {
 		this.imagem = imagem;
+	}
+	public Categoria getCategoria() {
+		return categoria;
+	}
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+	public LocalDateTime getDataCriado() {
+		return dataCriado;
+	}
+	public void setDataCriado(LocalDateTime dataCriado) {
+		this.dataCriado = dataCriado;
+	}
+	public LocalDateTime getDataEntregue() {
+		return dataEntregue;
+	}
+	public void setDataEntregue(LocalDateTime dataEntregue) {
+		this.dataEntregue = dataEntregue;
 	}
 }

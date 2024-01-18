@@ -21,6 +21,7 @@ public class PedidoDTO implements Serializable{
 	private String tel_cliente;
 	private String opcaoPagamento;
 	private String urlPedido;
+	private boolean entregue;
 	private List<ItemPedido> itens;
 	
 	public PedidoDTO(Cliente cliente, List<ItemPedido> itens) {
@@ -32,6 +33,7 @@ public class PedidoDTO implements Serializable{
 		this.setBairro(bairro);
 		this.setReferencia(referencia);
 		this.setItens(itens);
+		this.setEntregue(false);
 	}
 
 	public PedidoDTO() {
@@ -126,5 +128,12 @@ public class PedidoDTO implements Serializable{
 		this.urlPedido = urlPedido;
 	}
 
+	public boolean isEntregue() {
+		return entregue;
+	}
+	
+	public void setEntregue(boolean entregue) {
+		this.entregue = entregue;
+	}
 }
 

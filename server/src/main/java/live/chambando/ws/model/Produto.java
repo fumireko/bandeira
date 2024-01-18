@@ -4,9 +4,12 @@ import java.io.Serializable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -33,11 +36,16 @@ public class Produto implements Serializable{
 	
 	@Column(name="imagem_produto", length=1024)
     private String imagem;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="fkCategoria")
+	private Categoria categoria;
     
-    public Produto(String nome, double preco, String imagem) {
+    public Produto(String nome, double preco, String imagem, Categoria categoria) {
 		this.setNome(nome);
 		this.setPreco(preco);
 		this.setImagem(imagem);
+		this.setCategoria(categoria);
 	}
     
     public Produto() {
@@ -67,5 +75,11 @@ public class Produto implements Serializable{
 	}
 	public void setImagem(String imagem) {
 		this.imagem = imagem;
+	}
+	public Categoria getCategoria() {
+		return categoria;
+	}
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 }

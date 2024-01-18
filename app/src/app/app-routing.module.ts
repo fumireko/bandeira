@@ -1,34 +1,20 @@
-import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ListagemClienteComponent } from './cliente/listagem-cliente/listagem-cliente.component';
-import { PedidoClienteComponent } from './cliente/pedido-cliente/pedido-cliente.component';
-import { EditarPedidoComponent } from './pedido/editar-pedido/editar-pedido.component';
-import { InserirPedidoComponent } from './pedido/inserir-pedido/inserir-pedido.component';
-import { ListarPedidoComponent } from './pedido/listar-pedido/listar-pedido.component';
-import { EditarProdutoComponent } from './produto/editar-produto/editar-produto.component';
-import { InserirProdutoComponent } from './produto/inserir-produto/inserir-produto.component';
+import { NgModule } from '@angular/core';
 import { ListarProdutoComponent } from './produto/listar-produto/listar-produto.component';
-import { EnviarPedidoComponent } from './cliente/enviar-pedido/enviar-pedido.component';
+import { InserirProdutoComponent } from './produto/inserir-produto/inserir-produto.component';
+import { EditarProdutoComponent } from './produto/editar-produto/editar-produto.component';
+import { EditarCategoriaComponent } from './categoria/editar-categoria/editar-categoria.component';
+import { InserirCategoriaComponent } from './categoria/inserir-categoria/inserir-categoria.component';
+import { ListarCategoriaComponent } from './categoria/listar-categoria/listar-categoria.component';
+import { ListarPedidoComponent } from './pedido/listar-pedido/listar-pedido.component';
 
 const routes: Routes = [
   {
-    path: 'pedidos/listar',
-    component: ListarPedidoComponent
-  },
-  {
-    path: 'pedidos/novo',
-    component: InserirPedidoComponent
-  },
-  {
-    path: 'pedidos/editar/:id',
-    component: EditarPedidoComponent
-  },
-  {
-    path: 'produtos/listar',
+    path: 'produtos',
     component: ListarProdutoComponent
   },
   {
-    path: 'produtos/novo',
+    path: 'produtos/inserir',
     component: InserirProdutoComponent
   },
   {
@@ -36,19 +22,22 @@ const routes: Routes = [
     component: EditarProdutoComponent
   },
   {
-    path: '',
-    component: ListagemClienteComponent
+    path: 'categorias',
+    component: ListarCategoriaComponent
   },
   {
-    path: 'pedido',
-    component: PedidoClienteComponent
+    path: 'categorias/inserir',
+    component: InserirCategoriaComponent
   },
   {
-    path: 'enviar-pedido',
-    component: EnviarPedidoComponent
+    path: 'categorias/editar/:id',
+    component: EditarCategoriaComponent
+  },
+  {
+    path: 'pedidos',
+    component: ListarPedidoComponent
   }
 ];
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

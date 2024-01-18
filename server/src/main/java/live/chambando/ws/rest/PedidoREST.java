@@ -16,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -112,6 +113,21 @@ public class PedidoREST {
         }
     }
     
+    @PutMapping("/pedidos/{id}/entregar")
+    public ResponseEntity<PedidoDTO> marcarPedidoComoEntregue(@PathVariable("id") Long id) {
+        Optional<Pedido> optionalPedido = pedidoRepository.findById(id);
+        if (optionalPedido.isPresent()) {
+            Pedido pedido = optionalPedido.get();
+            if (pedido.isEntregue())
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+            pedido.setEntregue(true);
+            pedidoRepository.save(pedido);
+            PedidoDTO pedidoDTO = mapper.map(pedido, PedidoDTO.class);
+            return ResponseEntity.ok(pedidoDTO);
+        } else return ResponseEntity.notFound().build();
+    }
+    
     private String criarUrlPedido(Pedido pedido) {
         List<ItemPedido> itens = pedido.getItens();
         BigDecimal total = totalPedido(itens);
@@ -138,7 +154,6 @@ public class PedidoREST {
         }
         return total;
     }
-
 
     private String encodeURIComponent(String value) {
         try {

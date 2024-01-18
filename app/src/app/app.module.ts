@@ -4,35 +4,28 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ProdutoComponent } from './produto/produto.component';
-import { PedidoComponent } from './pedido/pedido.component';
-import { EditarPedidoComponent } from './pedido/editar-pedido/editar-pedido.component';
-import { ListarPedidoComponent } from './pedido/listar-pedido/listar-pedido.component';
-import { InserirPedidoComponent } from './pedido/inserir-pedido/inserir-pedido.component';
+import { FormsModule } from '@angular/forms';
+import { ListarProdutoComponent } from './produto/listar-produto/listar-produto.component';
 import { EditarProdutoComponent } from './produto/editar-produto/editar-produto.component';
 import { InserirProdutoComponent } from './produto/inserir-produto/inserir-produto.component';
-import { ListarProdutoComponent } from './produto/listar-produto/listar-produto.component';
-import { ClienteComponent } from './cliente/cliente.component';
-import { ListagemClienteComponent } from './cliente/listagem-cliente/listagem-cliente.component';
-import { PedidoClienteComponent } from './cliente/pedido-cliente/pedido-cliente.component';
-import { FormsModule } from '@angular/forms';
-import { EnviarPedidoComponent } from './cliente/enviar-pedido/enviar-pedido.component';
+import { EditarCategoriaComponent } from './categoria/editar-categoria/editar-categoria.component';
+import { ListarCategoriaComponent } from './categoria/listar-categoria/listar-categoria.component';
+import { InserirCategoriaComponent } from './categoria/inserir-categoria/inserir-categoria.component';
+import { ListarPedidoComponent } from './pedido/listar-pedido/listar-pedido.component';
+import { EditarPedidoComponent } from './pedido/editar-pedido/editar-pedido.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    ProdutoComponent,
-    PedidoComponent,
-    EditarPedidoComponent,
-    ListarPedidoComponent,
-    InserirPedidoComponent,
+    ListarProdutoComponent,
     EditarProdutoComponent,
     InserirProdutoComponent,
-    ListarProdutoComponent,
-    ClienteComponent,
-    ListagemClienteComponent,
-    PedidoClienteComponent,
-    EnviarPedidoComponent
+    EditarCategoriaComponent,
+    ListarCategoriaComponent,
+    InserirCategoriaComponent,
+    ListarPedidoComponent,
+    EditarPedidoComponent,
   ],
   imports: [
     BrowserModule,

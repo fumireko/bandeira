@@ -1,8 +1,10 @@
 package live.chambando.ws.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -60,8 +62,19 @@ public class Pedido implements Serializable{
 	@Column(name="url_pedido", length=1024)
 	private String urlPedido;
 	
+	@Column(name="entregue")
+	private boolean entregue;
+	
 	@OneToMany(mappedBy="pedido")
 	private List<ItemPedido> itens;
+	
+	@Column(name = "data_criado")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dataCriado;
+
+    @Column(name = "data_entregue")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dataEntregue;
 	
 	public Pedido(String nome_cliente, String tel_cliente, String cidade, String logradouro, String numero_predial, String bairro, String referencia, List<ItemPedido> itens) {
 		this.setNome_cliente(nome_cliente);
@@ -72,6 +85,8 @@ public class Pedido implements Serializable{
 		this.setBairro(bairro);
 		this.setReferencia(referencia);
 		this.setItens(itens);
+		this.setEntregue(false);
+		this.dataCriado = LocalDateTime.now();
 	}
 
 	public Pedido() {
@@ -172,5 +187,14 @@ public class Pedido implements Serializable{
 	
 	public void setUrlPedido(String urlPedido) {
 		this.urlPedido = urlPedido;
+	}
+	
+	public boolean isEntregue() {
+		return entregue;
+	}
+	
+	public void setEntregue(boolean entregue) {
+		if(entregue) this.dataEntregue = LocalDateTime.now();
+		else this.entregue = entregue;
 	}
 }
