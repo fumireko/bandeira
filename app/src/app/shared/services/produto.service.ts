@@ -24,9 +24,11 @@ export class ProdutoService {
   }
 
   buscarPorID(id: number): Observable<Produto | undefined>{
-    return this.listarTodos().pipe(
-      map(e => e.find(p => p.id == id))
-    );
+    return this.http.get<Produto>(`${AppComponent.backendURL}/produtos/${id}`);
+  }
+
+  buscarPorCategoria(id: number | undefined): Observable<Produto[]>{
+    return this.http.get<Produto[]>(`${AppComponent.backendURL}/produtos?categoria=${id}`);
   }
 
   atualizar(produto: Produto): Observable<Produto> {
