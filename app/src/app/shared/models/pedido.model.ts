@@ -12,9 +12,11 @@ export class Pedido {
         public tel_cliente?: string,
         public opcaoPagamento?: string,
         public urlPedido?: string,
+        public dataCriado?: string,
+        public dataEntregue?: string,
+        public entregue?: boolean,
+        public precoFrete?: number,
         public itens?: ItemPedido[],
-        public data_criado?: string,
-        public data_entregue?: string,
-        public entregue?: boolean
+        public totalPedido?: number
     ){}
 }

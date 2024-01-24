@@ -1,5 +1,35 @@
+<nav class="navbar navbar-expand-lg bg-body-secondary">
+    <div class="container-fluid">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" [routerLink]="['/pedidos']">Pedidos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/produtos']">Produtos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/categorias']">Categorias</a>
+            </li>
+        </ul>    
+    </div>
+</nav>
+
 <body>
-    <h1 style="width: 70vw;" class="mx-auto text-start my-5">Listagem de Pedidos</h1>
+    <h1 style="width: 70vw;" class="mx-auto text-start mt-5">Listagem de Pedidos</h1>
+
+    <div class="row mx-auto" style="width: 70vw;">
+        <div class="mb-5 mx-auto" style="width: 35vw;">
+            <div class="form-check m-0 pt-3">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="mostrarEntregues">
+                <label class="form-check-label">Mostrar entregues</label>
+            </div>
+        </div>
+    
+        <div class="mb-5 mx-auto input-group" style="width: 35vw;">
+            <input type="text" class="form-control mt-2" style="width: 67%" placeholder="Buscar pedidos"
+            [(ngModel)]="termoBusca" (input)="filtrarPedidos()">
+        </div>
+    </div>
 
     <table class="table table-bordered table-hover mx-auto" style="width: 70vw;">
         <tbody>
@@ -15,12 +45,6 @@
                     <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'logradouro'"></i>
                     <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'logradouro' && ordemAscendente"></i>
                     <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'logradouro' && !ordemAscendente"></i>
-                </th>
-                <th (click)="alternarOrdem('cidade')">
-                    Cidade
-                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'cidade'"></i>
-                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'cidade' && ordemAscendente"></i>
-                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'cidade' && !ordemAscendente"></i>
                 </th>
                 <th (click)="alternarOrdem('nome_cliente')">
                     Nome
@@ -41,7 +65,7 @@
                     <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'opcaoPagamento' && !ordemAscendente"></i>
                 </th>
                 <th (click)="alternarOrdem('data_criado')">
-                    Data
+                    Data criado
                     <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'data_criado'"></i>
                     <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'data_criado' && ordemAscendente"></i>
                     <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'data_criado' && !ordemAscendente"></i>
@@ -59,21 +83,23 @@
                 </th>
             </tr>
             <tr *ngFor="let pedido of filtrados" class="text-center">
-              <td>{{pedido.id}}</td>
-              <td>{{pedido.logradouro}}, {{pedido.numeroPredial}} - {{pedido.bairro}}</td>
-              <td>{{pedido.cidade}}</td>
-              <td>{{pedido.nome_cliente}}</td>
-              <td>{{pedido.tel_cliente}}</td>
-              <td>{{pedido.opcaoPagamento}}</td>
-              <td>{{pedido.data_criado}}</td>
-              <td>{{ pedido.entregue ? pedido.data_entregue : 'Não entregue' }}</td>
-              <td class="d-flex justify-content-evenly">
+              <td *ngIf="!pedido.entregue || mostrarEntregues">{{pedido.id}}</td>
+              <td *ngIf="!pedido.entregue || mostrarEntregues">{{pedido.logradouro}}, {{pedido.numeroPredial}} - {{pedido.bairro}}, {{pedido.cidade}}</td>
+              <td *ngIf="!pedido.entregue || mostrarEntregues">{{pedido.nome_cliente}}</td>
+              <td *ngIf="!pedido.entregue || mostrarEntregues">{{pedido.tel_cliente}}</td>
+              <td *ngIf="!pedido.entregue || mostrarEntregues">{{pedido.opcaoPagamento}}</td>
+              <td *ngIf="!pedido.entregue || mostrarEntregues">{{pedido.dataCriado}}</td>
+              <td *ngIf="!pedido.entregue || mostrarEntregues">{{ pedido.entregue ? pedido.dataEntregue : 'Não entregue' }}</td>
+              <td *ngIf="!pedido.entregue || mostrarEntregues" class="d-flex justify-content-evenly">
                   <a [routerLink]="['./editar', pedido.id]" class="btn-primary btn col-6 me-1">
                       <i class="fa fa-edit" aria-hidden="true"></i>
                   </a>
                   <br>
-                  <a (click)="remover(pedido)" class="btn-success btn col-6">
+                  <a *ngIf="!pedido.entregue" (click)="entregar(pedido)" class="btn-success btn col-6">
                       <i class="fa fa-check" aria-hidden="true"></i>
+                  </a>
+                  <a *ngIf="pedido.entregue" (click)="remover(pedido)" class="btn-danger btn col-6">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
                   </a>
               </td>
             </tr>

@@ -16,8 +16,6 @@ public class ProdutoDTO implements Serializable{
     private double preco;
     private String imagem;
     private Categoria categoria;
-    private LocalDateTime dataCriado;
-    private LocalDateTime dataEntregue;
     
     public ProdutoDTO(String nome, double preco, String imagem, Categoria categoria) {
 		this.setNome(nome);
@@ -59,17 +57,5 @@ public class ProdutoDTO implements Serializable{
 	}
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
-	}
-	public LocalDateTime getDataCriado() {
-		return dataCriado;
-	}
-	public void setDataCriado(LocalDateTime dataCriado) {
-		this.dataCriado = dataCriado;
-	}
-	public LocalDateTime getDataEntregue() {
-		return dataEntregue;
-	}
-	public void setDataEntregue(LocalDateTime dataEntregue) {
-		this.dataEntregue = dataEntregue;
 	}
 }

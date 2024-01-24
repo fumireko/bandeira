@@ -1,1 +1,84 @@
-<p>editar-pedido works!</p>
+<body>
+    <ul class="nav nav-tabs mt-1">
+        <li class="nav-item">
+          <a *ngIf="layout === 'itens'" class="nav-link active" (click)="view('itens')">Itens do pedido</a>
+          <a *ngIf="layout === 'dados'" class="nav-link" (click)="view('itens')">Itens do pedido</a>
+        </li>
+        <li class="nav-item">
+          <a *ngIf="layout === 'dados'" class="nav-link active" (click)="view('dados')">Dados do pedido</a>
+          <a *ngIf="layout === 'itens'" class="nav-link" (click)="view('dados')">Dados do pedido</a>
+        </li>
+    </ul>
+
+    <h1 style="width: 70vw;" class="mx-auto text-start mt-5">Pedido #{{ pedido.id }}</h1>
+
+    <div *ngIf="layout === 'itens'" class="row mx-auto" style="width: 70vw;">
+        <div class="mb-5 mx-auto" style="width: 35vw;">
+            <div class="form-check m-0 pt-3">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="mostrarImagens">
+                <label class="form-check-label" for="chkExibirImagens">Exibir Imagens</label>
+            </div>
+        </div>
+        <div class="mb-5 mx-auto" style="width: 35vw;"></div>
+    </div>
+
+    <table *ngIf="layout === 'itens'" class="table table-bordered table-hover mx-auto" style="width: 70vw;">
+        <tbody>
+            <tr class="text-center">
+                <th>Quantidade</th>
+                <th *ngIf="mostrarImagens">Imagem</th>
+                <th>Descrição</th>
+                <th>Subtotal</th>
+            </tr>
+            <tr *ngFor="let item of pedido.itens" class="text-center">
+              <td>{{item.quantidade}}</td>
+              <td *ngIf="mostrarImagens"><img src="{{item.produto?.imagem}}" class="img-fluid"></td>
+              <td>{{item.produto?.nome}}</td>
+              <td>{{ item.produto && item.produto.preco ? item.produto.preco * item.quantidade : 'N/A' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row mx-auto pt-3" style="width: 70vw;" *ngIf="layout === 'dados'">
+        <div class="col-4 border p-2">
+            <h4>Informações do pedido</h4>
+            <hr>
+            <p class="fw-bold mb-0 pb-0">ID do Pedido:</p>
+            <p>{{ pedido.id }}</p>
+            <p class="fw-bold mb-0 pb-0">Data de Criação:</p>
+            <p>{{ pedido.dataCriado }}</p>
+            <p class="fw-bold mb-0 pb-0 pb-0">Data de Entrega:</p>
+            <p>{{ pedido.dataEntregue === pedido.dataCriado ? 'Ainda não entregue' : pedido.dataEntregue }}</p>
+        </div>
+
+        <div class="col-4 border p-2">
+            <h4>Dados do pagamento</h4>
+            <hr>
+            <p class="fw-bold mb-0 pb-0">Status de Entrega:</p>
+            <p class="fw-bold"
+               [class.text-danger]="!pedido.entregue"
+               [class.text-success]="pedido.entregue">
+               {{ pedido.entregue ? 'Entregue' : 'Pendente' }}
+            </p>
+            <p class="fw-bold mb-0 pb-0">Opção de Pagamento:</p>
+            <p>{{ pedido.opcaoPagamento }}</p>
+            <p class="fw-bold mb-0 pb-0">Preço do Frete:</p>
+            <p>R{{ pedido.precoFrete | currency}}</p>
+            <p class="fw-bold mb-0 pb-0">Total do Pedido:</p>
+            <p class="fs-5 fw-bold mb-0 pb-0">R{{ pedido.totalPedido | currency }}</p>
+        </div>
+    
+        <div class="col-4 border p-2">
+            <h4>Dados do cliente</h4>
+            <hr>
+            <p class="fw-bold mb-0 pb-0">Nome do Cliente:</p>
+            <p>{{ pedido.nome_cliente }}</p>
+            <p class="fw-bold mb-0 pb-0">Telefone do Cliente:</p>
+            <p>{{ pedido.tel_cliente }}</p>
+            <p class="fw-bold mb-0 pb-0">Endereço:</p>
+            <p>{{ pedido.logradouro }} {{ pedido.numeroPredial }}, {{ pedido.bairro }} - {{ pedido.cidade }}</p>
+            <p class="fw-bold mb-0 pb-0">Referência:</p>
+            <p>{{ pedido.referencia || 'N/A' }}</p>
+        </div>
+    </div>
+</body>

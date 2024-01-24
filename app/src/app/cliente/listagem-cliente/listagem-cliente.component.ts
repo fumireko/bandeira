@@ -2,6 +2,7 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, forkJoin } from 'rxjs';
+import { AppComponent } from 'src/app/app.component';
 import { Categoria } from 'src/app/shared/models/categoria.model';
 import { ItemPedido } from 'src/app/shared/models/itempedido.model';
 import { Pedido } from 'src/app/shared/models/pedido.model';
@@ -23,6 +24,8 @@ export class ListagemClienteComponent {
   produtosCategoria: Produto[][] = [];
   finalizarPedido: boolean = false;
   urlPedido: string | undefined = "";
+  fretesITP = AppComponent.fretesITP.sort((a, b) => a.bairro.localeCompare(b.bairro));;
+  fretesRBS = AppComponent.fretesRBS.sort((a, b) => a.bairro.localeCompare(b.bairro));;
 
   pedido: Pedido = new Pedido();
   itens: ItemPedido[] = [];
@@ -56,6 +59,10 @@ export class ListagemClienteComponent {
   enviarPedido() {
     if (this.formPedido.valid) {
       this.pedido.itens = this.itens;
+      let dataAtual = new Date().toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/\//g, '-').replace(',', '');
+      this.pedido.dataCriado = dataAtual;
+      this.pedido.dataEntregue = dataAtual;
+      this.pedido.precoFrete = this.getPrecoFrete(this.pedido.bairro, this.pedido.cidade);
       this.pedidoService.inserir(this.pedido).subscribe(
         (pedidoInserido) => {
           console.log('Pedido inserido com sucesso:', pedidoInserido);
@@ -113,7 +120,12 @@ export class ListagemClienteComponent {
       const precoProduto = item.produto?.preco || 0; // Certifica-se de que o preço não seja nulo ou indefinido
       return total + (precoProduto * item.quantidade);
     }, 0);
-  }  
+  }
+  
+  getPrecoFrete(bairro: string | undefined, cidade: string | undefined): number | undefined {
+    const fretes = cidade === 'Rio Branco do Sul' ? AppComponent.fretesRBS : cidade === 'Itaperuçu' ? AppComponent.fretesITP : [];
+    return fretes.find(item => item.bairro === bairro)?.precoFrete || 0;
+  }
 
   temItens(): boolean {
     return this.itens ? this.itens.length > 0 : false;

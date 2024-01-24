@@ -2,6 +2,7 @@ package live.chambando.ws.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -14,8 +15,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -69,12 +68,18 @@ public class Pedido implements Serializable{
 	private List<ItemPedido> itens;
 	
 	@Column(name = "data_criado")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime dataCriado;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private String dataCriado;
 
     @Column(name = "data_entregue")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime dataEntregue;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private String dataEntregue;
+    
+    @Column(name = "preco_frete")
+    private double precoFrete;
+    
+    @Column(name = "total_pedido")
+    private double totalPedido;
 	
 	public Pedido(String nome_cliente, String tel_cliente, String cidade, String logradouro, String numero_predial, String bairro, String referencia, List<ItemPedido> itens) {
 		this.setNome_cliente(nome_cliente);
@@ -86,12 +91,35 @@ public class Pedido implements Serializable{
 		this.setReferencia(referencia);
 		this.setItens(itens);
 		this.setEntregue(false);
-		this.dataCriado = LocalDateTime.now();
+		this.setDataCriado(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now()));
+		this.setPrecoFrete(0);
+		this.setTotalPedido(0);
 	}
 
 	public Pedido() {
 		// TODO Auto-generated constructor stub
 	}
+	
+    @Override
+    public String toString() {
+        return "Pedido{" +
+                "id=" + id +
+                ", cidade='" + cidade + '\'' +
+                ", logradouro='" + logradouro + '\'' +
+                ", numero_predial='" + numero_predial + '\'' +
+                ", bairro='" + bairro + '\'' +
+                ", referencia='" + referencia + '\'' +
+                ", nomeCliente='" + nomeCliente + '\'' +
+                ", telCliente='" + telCliente + '\'' +
+                ", opcaoPagamento='" + opcaoPagamento + '\'' +
+                ", urlPedido='" + urlPedido + '\'' +
+                ", entregue=" + entregue +
+                ", itens=" + itens +
+                ", dataCriado='" + dataCriado + '\'' +
+                ", dataEntregue='" + dataEntregue + '\'' +
+                ", precoFrete=" + precoFrete +
+                '}';
+    }
 
 	public long getId() {
 		return id;
@@ -196,8 +224,41 @@ public class Pedido implements Serializable{
 	public void setEntregue(boolean entregue) {
 		if(entregue) {
 			System.out.println("true");
-			this.dataEntregue = LocalDateTime.now();
+			this.entregue = entregue;
+			this.setDataEntregue(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now()));
 		}
 		else this.entregue = entregue;
+	}
+	
+	public void setDataCriado(String dataCriado) {
+		this.dataCriado = dataCriado;
+	}
+	
+	public String getDataCriado() {
+		return dataCriado;
+	}
+	
+	public void setDataEntregue(String dataEntregue) {
+		this.dataEntregue = dataEntregue;
+	}
+	
+	public String getDataEntregue() {
+		return dataEntregue;
+	}
+	
+	public void setPrecoFrete(double precoFrete) {
+		this.precoFrete = precoFrete;
+	}
+	
+	public double getPrecoFrete() {
+		return precoFrete;
+	}
+	
+	public void setTotalPedido(double totalPedido) {
+		this.totalPedido = totalPedido;
+	}
+	
+	public double getTotalPedido() {
+		return totalPedido;
 	}
 }

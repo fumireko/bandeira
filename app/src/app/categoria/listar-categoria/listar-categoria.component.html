@@ -1,3 +1,19 @@
+<nav class="navbar navbar-expand-lg bg-body-secondary">
+    <div class="container-fluid">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/pedidos']">Pedidos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/produtos']">Produtos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" [routerLink]="['/categorias']">Categorias</a>
+            </li>
+        </ul>    
+    </div>
+</nav>
+
 <body>
     <h1 style="width: 70vw;" class="mx-auto text-start my-5">Listagem de Categorias</h1>
 
@@ -37,5 +53,5 @@
             </tr>
         </tbody>
     </table>
-    <p *ngIf="categorias.length==0" class="text-center">Nenhum produto cadastrado.</p>
+    <p *ngIf="categorias.length==0" class="text-center">Nenhuma categoria cadastrada.</p>
 </body>

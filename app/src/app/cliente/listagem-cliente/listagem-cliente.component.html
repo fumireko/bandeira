@@ -20,7 +20,7 @@
           <div [id]="'collapse' + categoria.id" class="accordion-collapse collapse show" data-bs-parent="#accordion">
             <div class="accordion-body row row-cols-2 row-cols-md-0 g-3">
               <div class="col card" *ngFor="let produto of produtosCategoria[checkUndefined(categoria.id)]">
-                <img src="{{produto.imagem}}" class="card-img-top img-fluid">
+                <img src="{{produto.imagem}}" class="card-img-top img-fluid" loading="lazy">
                 <div class="card-body px-1 m-0">
                   <h5 class="card-title">R{{produto.preco | currency}}</h5>
                   <p class="card-text">{{produto.nome}}</p>
@@ -40,34 +40,10 @@
     </div>
   </div>
   
-  <h1 *ngIf="!finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3" id="carrinho">Carrinho</h1>
-  <h1 *ngIf="finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3" id="carrinho">Pedido</h1>
-  <hr>
-  
-  <table class="table table-bordered table-hover mb-5 pb-5">
-    <tbody>
-        <tr class="text-center">
-          <th>Quantidade</th>
-          <th>Produto</th>
-          <th>Preço</th>
-        </tr>
-        <tr *ngFor="let item of itens" class="text-center">
-          <td>{{ item.quantidade }}</td>
-          <td>{{ item.produto?.nome }}</td>
-          <td>{{ item.produto?.preco }}</td>
-        </tr>
-        <tr class="fw-bold">
-          <td colspan="2">Total</td>
-          <td>R{{ subtotal(itens) | currency }}</td>
-        </tr>
-    </tbody>
-  </table>
-  
-  <p *ngIf="!temItens()" class="text-center">Seu carrinho está vazio.</p>
   <div class="d-flex justify-content-center">
     <form *ngIf="finalizarPedido" #formPedido="ngForm" (ngSubmit)="enviarPedido()" class="mx-2" style="width: 85vw;">
   
-      <h2 class="mx-auto text-center mb-5">Dados do pedido</h2>
+      <h1 class="mx-auto text-center my-3">Dados do pedido</h1>
       
       <label for="opcaoPagamento">Forma de pagamento:</label>
       <select name="opcaoPagamento" id="opcaoPagamento" class="form-select" [(ngModel)]="pedido.opcaoPagamento" #opcaoPagamento="ngModel">
@@ -92,22 +68,30 @@
       <div *ngIf="numeroPredial.errors && (numeroPredial.dirty || numeroPredial.touched)" class="alert alert-danger">
           <div [hidden]="!numeroPredial.errors['required']">Digite o número predial.</div>
       </div>
-    
-      <label for="bairro">Bairro:</label>
-      <input type="text" class="form-control" id="bairro" name="bairro" [(ngModel)]="pedido.bairro" #bairro="ngModel" minlength="2" required>
-      <div *ngIf="bairro.errors && (bairro.dirty || bairro.touched)" class="alert alert-danger">
-          <div [hidden]="!bairro.errors['required']">Digite o bairro.</div>
-          <div [hidden]="!bairro.errors['minlength']">O bairro deve conter pelo menos 3 caracteres.</div>
-      </div>
       
       <label for="cidade">Cidade:</label>
       <select name="cidade" id="cidade" class="form-select" [(ngModel)]="pedido.cidade" #cidade="ngModel" required>
-        <option value="Rio Branco do Sul">Rio Branco do Sul</option>
+        <option value="Rio Branco do Sul" selected>Rio Branco do Sul</option>
         <option value="Itaperuçu">Itaperuçu</option>
-        <option value="Almirante Tamandaré">Almirante Tamandaré</option>
       </select>
       <div *ngIf="cidade.errors && (cidade.dirty || cidade.touched)" class="alert alert-danger">
         <div [hidden]="!cidade.errors['required']">Escolha uma cidade.</div>
+      </div>
+
+      <label for="bairro">Bairro:</label>
+      <select name="bairro" id="bairro" class="form-select" [(ngModel)]="pedido.bairro" #bairro="ngModel" required>
+        <ng-container *ngIf="cidade.value == 'Itaperuçu'">
+          <option *ngFor="let item of fretesITP" [value]="item.bairro">{{ item.bairro }}</option>
+        </ng-container>
+        <ng-container *ngIf="cidade.value == 'Rio Branco do Sul'">
+          <option *ngFor="let item of fretesRBS" [value]="item.bairro">{{ item.bairro }}</option>
+        </ng-container>
+      </select>
+      <div *ngIf="bairro.errors && (bairro.dirty || bairro.touched)" class="alert alert-danger">
+          <div [hidden]="!bairro.errors['required']">Selecione um bairro.</div>
+      </div>
+      <div *ngIf="pedido.bairro" class="alert alert-info mt-2">
+        Frete para o bairro <span class="fw-bold">{{pedido.bairro}}: R{{getPrecoFrete(pedido.bairro, cidade.value) | currency}}</span>
       </div>
     
       <label for="referencia">Referência:</label>
@@ -130,11 +114,63 @@
           <div [hidden]="!tel_cliente.errors['minlength']">O telefone deve conter pelo menos 8 caracteres.</div>
           <div [hidden]="!tel_cliente.errors['pattern']">Número de telefone inválido.</div>
       </div>
+
+      <h1 *ngIf="finalizarPedido && pedido.bairro && pedido.cidade" class="mx-auto text-center my-3">Itens do pedido</h1>
+
+      <table *ngIf="finalizarPedido && pedido.bairro && pedido.cidade" class="table table-secondary table-bordered table-hover my-3 pb-5">
+        <tbody>
+            <tr class="text-center">
+              <th>Quantidade</th>
+              <th>Produto</th>
+              <th>Preço</th>
+            </tr>
+            <tr *ngFor="let item of itens" class="text-center table-light">
+              <ng-container *ngIf="item.quantidade > 0">
+                <td>{{ item.quantidade }}</td>
+                <td>{{ item.produto?.nome }}</td>
+                <td>{{ item.produto?.preco }}</td>
+              </ng-container>
+            </tr>
+            <tr *ngIf="pedido.bairro && pedido.cidade" class="fw-semibold">
+              <td colspan="2">Frete {{ pedido.bairro }}</td>
+              <td>R{{ getPrecoFrete(pedido.bairro, pedido.cidade) | currency }}</td>
+            </tr>
+            <tr class="fw-bold fs-5">
+              <td colspan="2">Total</td>
+              <td *ngIf="pedido.bairro">R{{ getPrecoFrete(pedido.bairro, pedido.cidade) + checkUndefined(subtotal(itens)) | currency }}</td>
+            </tr>
+        </tbody>
+      </table>
   
       <button type="submit" class="btn btn-primary col-12 mt-3 mb-5 py-3" [disabled]="!formPedido.valid">Enviar pedido</button>
     
     </form>
   </div>
+
+  <h1 *ngIf="!finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3" id="carrinho">Carrinho</h1>
+  <hr>
+  
+  <table *ngIf="!finalizarPedido" class="table table-bordered table-hover mb-5 pb-5">
+    <tbody>
+        <tr class="text-center">
+          <th>Quantidade</th>
+          <th>Produto</th>
+          <th>Preço</th>
+        </tr>
+        <tr *ngFor="let item of itens" class="text-center">
+          <td>{{ item.quantidade }}</td>
+          <td>{{ item.produto?.nome }}</td>
+          <td>{{ item.produto?.preco }}</td>
+        </tr>
+        <tr class="fw-bold">
+          <td colspan="2">Total</td>
+          <td>R{{ subtotal(itens) | currency }}</td>
+        </tr>
+    </tbody>
+  </table>
+  
+  <p *ngIf="!temItens()" class="text-center">Seu carrinho está vazio.</p>
+  
 </div>
 
 <div class="d-flex justify-content-center mt-3 mx-5" *ngIf="urlPedido != ''">

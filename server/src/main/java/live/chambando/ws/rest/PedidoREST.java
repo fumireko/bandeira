@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +50,9 @@ public class PedidoREST {
     @PostMapping("/pedidos")
     public ResponseEntity<PedidoDTO> inserirPedido(@RequestBody Pedido pedido) {
     	pedido.setUrlPedido(criarUrlPedido(pedido));
-        pedidoRepository.save(pedido);
+    	pedido.setDataCriado(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now()));
+    	System.out.println(pedido.toString());
+    	pedidoRepository.save(pedido);
         pedido.getItens().forEach(e -> itemPedidoRepository.save(e));
         for (ItemPedido itemPedido : pedido.getItens()) {
         	System.out.println(itemPedido.getId());
@@ -130,7 +133,8 @@ public class PedidoREST {
     
     private String criarUrlPedido(Pedido pedido) {
         List<ItemPedido> itens = pedido.getItens();
-        BigDecimal total = totalPedido(itens);
+        BigDecimal precoFrete = BigDecimal.valueOf(pedido.getPrecoFrete());
+        BigDecimal total = totalPedido(itens).add(precoFrete);
         
         String itensPedido = itens.stream()
                 .map(item -> String.format("   %dx %s (R$%.2f)", item.getQuantidade(), item.getProduto().getNome(), item.getProduto().getPreco()))
@@ -138,9 +142,11 @@ public class PedidoREST {
         String dadosRetirada = String.format("   Nome: %s\n   Telefone: %s\n   Endereço: %s %s, %s - %s",
                 pedido.getNome_cliente(), pedido.getTel_cliente(), pedido.getLogradouro(), pedido.getNumeroPredial(), pedido.getBairro(), pedido.getCidade());
         String pagamento = String.format("   PAGAMENTO %s", pedido.getOpcaoPagamento().toUpperCase());
-        String stringPedido = String.format("✅ NOVO PEDIDO\n\n    Pedido #%d\n\n%s\n\n   TOTAL: R$%.2f\n\n   ------------------------------\n   ▶ DADOS PARA RETIRADA\n\n%s\n\n   ------------------------------\n   ▶ PAGAMENTO\n\n%s",
-                pedido.getId(), itensPedido, total, dadosRetirada, pagamento);
+        String stringPedido = String.format("✅ NOVO PEDIDO\n\n    Pedido #%d\n\n%s\n\n   FRETE: R$%.2f\n TOTAL: R$%.2f\n\n   ------------------------------\n   ▶ DADOS PARA RETIRADA\n\n%s\n\n   ------------------------------\n   ▶ PAGAMENTO\n\n%s",
+                pedido.getId(), itensPedido, precoFrete, total, dadosRetirada, pagamento);
         String url = "https://api.whatsapp.com/send?phone=41996110756&text=" + encodeURIComponent(stringPedido);
+        System.out.println(url);
+        pedido.setTotalPedido(total.doubleValue());
 
         return url;
     }

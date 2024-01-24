@@ -14,6 +14,10 @@ export class ListarPedidoComponent implements OnInit {
   filtrados: Pedido[] = [];
   colunaOrdenacao: string = 'id';
   ordemAscendente: boolean = true;
+
+  mostrarEntregues: boolean = true;
+  termoBusca: string = "";
+  categoriaDescricao: string = "";
   
   constructor(private router: Router,
               private pedidoService: PedidoService) {}
@@ -24,6 +28,14 @@ export class ListarPedidoComponent implements OnInit {
       this.ordenarPedidos();
     });
   }    
+
+  filtrarPedidos() {
+    this.filtrados = this.pedidos.filter(pedido => {
+      return pedido.logradouro?.toLowerCase().includes(this.termoBusca.toLowerCase());
+    });
+  
+    this.ordenarPedidos();
+  }
 
   ordenarPedidos() {
     this.filtrados.sort((a, b) => {
@@ -44,10 +56,11 @@ export class ListarPedidoComponent implements OnInit {
   }
 
   gerarListagem(): Observable<Pedido []> {
+    this.filtrarPedidos();
     return this.pedidoService.listarTodos();
   }
 
-  remover(pedido: Pedido) {
+  entregar(pedido: Pedido) {
     if (window.confirm(`Marcar o pedido ${pedido.id} como entregue?`)) {
       this.pedidoService.marcarEntregue(pedido).subscribe(
         (pedidoInserido) => {
@@ -55,12 +68,25 @@ export class ListarPedidoComponent implements OnInit {
           this.gerarListagem().subscribe(pedidos => {
             this.pedidos = pedidos;
             this.filtrados = this.pedidos;
+            this.ordenarPedidos();
           });
         },
         (error) => {
           console.error('Erro ao marcar como entregue:', error);
         }        
       );
+    }
+  }
+
+  remover(pedido: Pedido) {
+    if (window.confirm(`Remover o pedido ${pedido.id}?`)) {
+      this.pedidoService.remover(pedido.id).subscribe(() => {
+        this.gerarListagem().subscribe(pedidos => {
+          this.pedidos = pedidos;
+          this.filtrados = this.pedidos;
+          this.filtrarPedidos();
+        });
+      });
     }
   }
   

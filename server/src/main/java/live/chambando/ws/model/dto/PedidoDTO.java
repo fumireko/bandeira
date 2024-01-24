@@ -23,6 +23,10 @@ public class PedidoDTO implements Serializable{
 	private String urlPedido;
 	private boolean entregue;
 	private List<ItemPedido> itens;
+    private String dataCriado;
+    private String dataEntregue;
+    private double precoFrete;
+    private double totalPedido;
 	
 	public PedidoDTO(Cliente cliente, List<ItemPedido> itens) {
 		this.setNome_cliente(nome_cliente);
@@ -34,6 +38,8 @@ public class PedidoDTO implements Serializable{
 		this.setReferencia(referencia);
 		this.setItens(itens);
 		this.setEntregue(false);
+		this.setPrecoFrete(0);
+		this.setTotalPedido(0);
 	}
 
 	public PedidoDTO() {
@@ -134,6 +140,38 @@ public class PedidoDTO implements Serializable{
 	
 	public void setEntregue(boolean entregue) {
 		this.entregue = entregue;
+	}
+	
+	public String getDataCriado() {
+		return dataCriado;
+	}
+	
+	public void setDataCriado(String dataCriado) {
+		this.dataCriado = dataCriado;
+	}
+	
+	public String getDataEntregue() {
+		return dataEntregue;
+	}
+	
+	public void setDataEntregue(String dataEntregue) {
+		this.dataEntregue = dataEntregue;
+	}
+	
+	public double getPrecoFrete() {
+		return precoFrete;
+	}
+	
+	public void setPrecoFrete(double precoFrete) {
+		this.precoFrete = precoFrete;
+	}
+	
+	public void setTotalPedido(double totalPedido) {
+		this.totalPedido = totalPedido;
+	}
+	
+	public double getTotalPedido() {
+		return totalPedido;
 	}
 }
 

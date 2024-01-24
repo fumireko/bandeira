@@ -17,7 +17,6 @@ export class PedidoService {
   constructor(private http: HttpClient) {}
 
   listarTodos(): Observable<Pedido[]> {
-    console.log(JSON.stringify(this.http.get<Pedido[]>(`${AppComponent.backendURL}/pedidos`)));
     return this.http.get<Pedido[]>(`${AppComponent.backendURL}/pedidos`);
   }
 
@@ -25,17 +24,15 @@ export class PedidoService {
     return this.http.post<Pedido>(`${AppComponent.backendURL}/pedidos`, pedido);
   }
 
-  buscarPorID(id: number): Observable<Pedido | undefined> {
-    return this.listarTodos().pipe(
-      map(pedidos => pedidos.find(pedido => pedido.id === id))
-    );
+  buscarPorID(id: number): Observable<Pedido | undefined>{
+    return this.http.get<Produto>(`${AppComponent.backendURL}/pedidos/${id}`);
   }
 
   atualizar(pedido: Pedido): Observable<Pedido> {
     return this.http.put<Pedido>(`${AppComponent.backendURL}/pedidos/${pedido.id}`, pedido);
   }
 
-  remover(id: number): Observable<Pedido> {
+  remover(id: number | undefined): Observable<Pedido> {
     return this.http.delete<Pedido>(`${AppComponent.backendURL}/pedidos/${id}`);
   }
 

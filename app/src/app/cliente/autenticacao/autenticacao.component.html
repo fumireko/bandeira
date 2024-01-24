@@ -1,0 +1,9 @@
+<div class="d-flex justify-content-center">
+    <form #formAutenticacao="ngForm" (ngSubmit)="autenticar()" class="mx-2 mt-3" style="width: 85vw;">
+        <h2 class="mx-auto text-center mt-5">Digite a chave de acesso:</h2>
+        <div class="input-group px-auto mx-auto w-50 mt-3">
+            <input type="password" class="form-control" id="chave" name="chaveForm" [(ngModel)]="chaveForm" required>
+            <button class="btn btn-primary" type="submit">OK</button>
+        </div>
+    </form>    
+</div>

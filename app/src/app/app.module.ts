@@ -15,6 +15,7 @@ import { ListarPedidoComponent } from './pedido/listar-pedido/listar-pedido.comp
 import { EditarPedidoComponent } from './pedido/editar-pedido/editar-pedido.component';
 import { ListagemClienteComponent } from './cliente/listagem-cliente/listagem-cliente.component';
 import { PedidoClienteComponent } from './cliente/pedido-cliente/pedido-cliente.component';
+import { AutenticacaoComponent } from './cliente/autenticacao/autenticacao.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { PedidoClienteComponent } from './cliente/pedido-cliente/pedido-cliente.
     EditarPedidoComponent,
     ListagemClienteComponent,
     PedidoClienteComponent,
+    AutenticacaoComponent,
   ],
   imports: [
     BrowserModule,

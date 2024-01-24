@@ -8,6 +8,8 @@ import { InserirCategoriaComponent } from './categoria/inserir-categoria/inserir
 import { ListarCategoriaComponent } from './categoria/listar-categoria/listar-categoria.component';
 import { ListarPedidoComponent } from './pedido/listar-pedido/listar-pedido.component';
 import { ListagemClienteComponent } from './cliente/listagem-cliente/listagem-cliente.component';
+import { AutenticacaoComponent } from './cliente/autenticacao/autenticacao.component';
+import { EditarPedidoComponent } from './pedido/editar-pedido/editar-pedido.component';
 
 const routes: Routes = [
   {
@@ -37,6 +39,14 @@ const routes: Routes = [
   {
     path: 'pedidos',
     component: ListarPedidoComponent
+  },
+  {
+    path: 'pedidos/editar/:id',
+    component: EditarPedidoComponent
+  },
+  {
+    path: 'autenticacao',
+    component: AutenticacaoComponent
   },
   {
     path: '',
