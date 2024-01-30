@@ -1,31 +1,28 @@
-<nav class="navbar navbar-expand-lg bg-body-secondary mt-0 pt-0">
-    <div class="container-fluid mt-0 pt-0">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 mt-0 pt-0">
-            <li class="nav-item">
-              <a class="nav-link active mt-0 pt-0" [routerLink]="['/pedidos']">Pedidos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link mt-0 pt-0" [routerLink]="['/produtos']">Produtos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link mt-0 pt-0" [routerLink]="['/categorias']">Categorias</a>
-            </li>
-        </ul>    
-    </div>
-</nav>
+
+<ul class="nav nav-tabs me-auto mb-2 mb-lg-0 mt-0 pt-0 bg-custom">
+    <li class="nav-item">
+        <a class="nav-link active mt-1 mx-1 " [routerLink]="['/pedidos']">Pedidos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link mt-1 mx-1 " [routerLink]="['/produtos']">Produtos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link mt-1 mx-1 " [routerLink]="['/categorias']">Categorias</a>
+    </li>
+</ul>    
 
 <body>
-    <h1 style="width: 70vw;" class="mx-auto text-start mt-5">Listagem de Pedidos</h1>
+    <h1 style="width: 70vw;" class="mx-auto text-start mt-3 fw-semibold">Listagem de Pedidos</h1>
 
     <div class="row mx-auto" style="width: 70vw;">
-        <div class="mb-5 mx-auto" style="width: 35vw;">
+        <div class="mb-3 mx-auto" style="width: 35vw;">
             <div class="form-check m-0 pt-3">
                 <input class="form-check-input" type="checkbox" [(ngModel)]="mostrarEntregues">
                 <label class="form-check-label">Mostrar entregues</label>
             </div>
         </div>
     
-        <div class="mb-5 mx-auto input-group" style="width: 35vw;">
+        <div class="mb-3 mx-auto input-group" style="width: 35vw;">
             <input type="text" class="form-control mt-2" style="width: 67%" placeholder="Buscar pedidos"
             [(ngModel)]="termoBusca" (input)="filtrarPedidos()">
         </div>
@@ -89,7 +86,7 @@
               <td *ngIf="!pedido.entregue || mostrarEntregues">{{pedido.tel_cliente}}</td>
               <td *ngIf="!pedido.entregue || mostrarEntregues">{{pedido.opcaoPagamento}}</td>
               <td *ngIf="!pedido.entregue || mostrarEntregues">{{pedido.dataCriado}}</td>
-              <td *ngIf="!pedido.entregue || mostrarEntregues">{{ pedido.entregue ? pedido.dataEntregue : 'Não entregue' }}</td>
+              <td *ngIf="!pedido.entregue || mostrarEntregues" [ngClass]="{'text-success': pedido.entregue, 'text-danger': !pedido.entregue }">{{ pedido.entregue ? pedido.dataEntregue : 'Não entregue' }}</td>
               <td *ngIf="!pedido.entregue || mostrarEntregues" class="d-flex justify-content-evenly">
                   <a [routerLink]="['./editar', pedido.id]" class="btn-primary btn col-6 me-1">
                       <i class="fa fa-edit" aria-hidden="true"></i>

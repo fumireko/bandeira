@@ -1,21 +1,18 @@
-<nav class="navbar navbar-expand-lg bg-body-secondary mt-0 pt-0">
-    <div class="container-fluid mt-0 pt-0">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 mt-0 pt-0">
-            <li class="nav-item">
-              <a class="nav-link mt-0 pt-0" [routerLink]="['/pedidos']">Pedidos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link mt-0 pt-0" [routerLink]="['/produtos']">Produtos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active mt-0 pt-0" [routerLink]="['/categorias']">Categorias</a>
-            </li>
-        </ul>    
-    </div>
-</nav>
+
+<ul class="nav nav-tabs me-auto mb-2 mb-lg-0 mt-0 pt-0 bg-custom">
+    <li class="nav-item">
+        <a class="nav-link mt-1 mx-1 " [routerLink]="['/pedidos']">Pedidos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link mt-1 mx-1 " [routerLink]="['/produtos']">Produtos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active mt-1 mx-1 " [routerLink]="['/categorias']">Categorias</a>
+    </li>
+</ul>   
 
 <body>
-    <h1 style="width: 70vw;" class="mx-auto text-start my-5">Listagem de Categorias</h1>
+    <h1 style="width: 70vw;" class="mx-auto text-start my-3 fw-semibold">Listagem de Categorias</h1>
 
     <table class="table table-bordered table-hover mx-auto" style="width: 70vw;">
         <tbody>
@@ -32,6 +29,12 @@
                     <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'nome' && ordemAscendente"></i>
                     <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'nome' && !ordemAscendente"></i>
                 </th>
+                <th (click)="alternarOrdem('unidade')">
+                    Unidade
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'unidade'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'unidade' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'unidade' && !ordemAscendente"></i>
+                </th>
                 <th class="text-center">
                     <a [routerLink]="['./inserir']" class="btn-success btn">
                         <i class="fa fa-plus" aria-hidden="true"></i>
@@ -41,6 +44,7 @@
             <tr *ngFor="let categoria of filtradas" class="text-center">
               <td>{{categoria.id}}</td>
               <td>{{categoria.descricao}}</td>
+              <td>{{ categoria.unidade ? 'g' : 'Unitário' }}</td>       
               <td class="d-flex justify-content-evenly">
                   <a [routerLink]="['./editar', categoria.id]" class="btn-primary btn col-6 me-1">
                       <i class="fa fa-edit" aria-hidden="true"></i>

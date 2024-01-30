@@ -67,7 +67,7 @@ export class InserirProdutoComponent implements OnInit {
         this.produtoService.inserir(this.produto).subscribe({
           next: (res: any) => {
             alert("Inserido com sucesso.");
-            this.router.navigate(['../']);
+            this.router.navigate(['/produtos']);
           },
           error: (error: any) => {
             alert("Erro ao inserir o produto: " + JSON.stringify(error));

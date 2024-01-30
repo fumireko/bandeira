@@ -37,7 +37,7 @@ export class EditarCategoriaComponent {
       this.categoriaService.atualizar(this.categoria).subscribe({
         next: (res: any) => {
           alert("Editado com sucesso.");
-          this.router.navigate(['../']);
+          this.router.navigate(['/categorias']);
         },
         error: (error: any) => {
           alert("Erro ao editar a categoria: " + JSON.stringify(error));

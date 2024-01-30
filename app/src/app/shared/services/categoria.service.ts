@@ -15,6 +15,14 @@ export class CategoriaService {
     return this.http.get<Categoria[]>(`${AppComponent.backendURL}/categorias`);
   }
 
+  listarPeso(): Observable<Categoria[]> {
+    return this.http.get<Categoria[]>(`${AppComponent.backendURL}/categorias/peso/`);
+  }
+
+  listarUnitario(): Observable<Categoria[]> {
+    return this.http.get<Categoria[]>(`${AppComponent.backendURL}/categorias/unitario/`);
+  }
+
   inserir(categoria: Categoria){
     return this.http.post<Categoria>(`${AppComponent.backendURL}/categorias`, categoria);
   }

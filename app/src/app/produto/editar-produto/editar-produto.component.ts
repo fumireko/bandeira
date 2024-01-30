@@ -80,7 +80,7 @@ export class EditarProdutoComponent {
         this.produtoService.atualizar(this.produto).subscribe({
           next: (res: any) => {
             alert("Alterado com sucesso.");
-            this.router.navigate(['../']);
+            this.router.navigate(['/produtos']);
           },
           error: (error: any) => {
             alert("Erro ao alterar o produto: " + JSON.stringify(error));

@@ -28,6 +28,9 @@ public class Categoria implements Serializable {
 	@Column(name="desc_categoria")
 	private String descricao;
 	
+	@Column(name="unidade_categoria")
+	private boolean unidade;
+	
 	public Categoria(String descricao) {
 		this.setDescricao(descricao);
 	}
@@ -50,6 +53,14 @@ public class Categoria implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	
+	public boolean isUnidade() {
+		return unidade;
+	}
+	
+	public void setUnidade(boolean unidade) {
+		this.unidade = unidade;
 	}
 	
 }

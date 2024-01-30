@@ -18,3 +18,9 @@
     font-family: bauhaus;
     src: url("/assets/bauhaus-93.ttf");
 }
+
+@font-face {
+    font-family: helvetica;
+    src: url("/assets/Helvetica.ttf");
+}
+

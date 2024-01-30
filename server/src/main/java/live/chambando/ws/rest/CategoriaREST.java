@@ -36,6 +36,16 @@ public class CategoriaREST {
 		return list.stream().map(e -> mapper.map(e, CategoriaDTO.class)).collect(Collectors.toList());
 	}
 	
+	@GetMapping("/categorias/peso/")
+	public List<CategoriaDTO> obterCategoriasPeso() {
+		return categoriaRepository.findAll().stream().filter(Categoria::isUnidade).map(c -> mapper.map(c, CategoriaDTO.class)).collect(Collectors.toList());
+	}
+	
+	@GetMapping("/categorias/unitario/")
+	public List<CategoriaDTO> obterCategoriasUnitario() {
+		return categoriaRepository.findAll().stream().filter(c -> !c.isUnidade()).map(c -> mapper.map(c, CategoriaDTO.class)).collect(Collectors.toList());
+	}
+	
 	@PostMapping("/categorias")
 	public CategoriaDTO inserirCategoria(@RequestBody CategoriaDTO categoria) {
 		categoriaRepository.save(mapper.map(categoria, Categoria.class));
@@ -50,6 +60,7 @@ public class CategoriaREST {
 		if(optionalCategoria.isPresent()) {
 			Categoria categoriaExistente = optionalCategoria.get();
 			categoriaExistente.setDescricao(categoriaAtualizada.getDescricao());
+			categoriaExistente.setUnidade(categoriaAtualizada.isUnidade());
 			categoriaRepository.save(categoriaExistente);
 			CategoriaDTO categoriaDTO = mapper.map(categoriaExistente, CategoriaDTO.class);
 			return ResponseEntity.ok(categoriaDTO);

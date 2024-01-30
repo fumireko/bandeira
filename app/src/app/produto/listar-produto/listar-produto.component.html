@@ -12,17 +12,17 @@
 </ul>    
 
 <body>
-    <h1 style="width: 70vw;" class="mx-auto text-start mt-5">Listagem de Produtos</h1>
+    <h1 style="width: 70vw;" class="mx-auto text-start mt-3 fw-semibold">Listagem de Produtos</h1>
 
     <div class="row mx-auto" style="width: 70vw;">
-        <div class="mb-5 mx-auto" style="width: 35vw;">
+        <div class="mb-3 mx-auto" style="width: 35vw;">
             <div class="form-check m-0 pt-3">
                 <input class="form-check-input" type="checkbox" [(ngModel)]="mostrarImagens">
                 <label class="form-check-label" for="chkExibirImagens">Exibir Imagens</label>
             </div>
         </div>
     
-        <div class="mb-5 mx-auto input-group" style="width: 35vw;">
+        <div class="mb-3 mx-auto input-group" style="width: 35vw;">
             <input type="text" class="form-control mt-2" style="width: 67%" placeholder="Buscar produtos"
             [(ngModel)]="termoBusca" (input)="filtrarProdutos()">
             <select class="form-select mt-2" id="categoria" name="categoria" style="width: 33%" [(ngModel)]="categoriaDescricao" (change)="filtrarProdutos()">
@@ -86,7 +86,7 @@
               <td>{{produto.categoria?.descricao}}</td>
               <td>R{{produto.preco | currency }}</td>  
               <td [ngClass]="{'text-success': produto.disponivel, 'text-danger': !produto.disponivel}">
-                {{ produto.disponivel ? 'Ativo' : 'Inativo' }}
+                {{ produto.disponivel ? 'OK' : 'Indisponível' }}
               </td>              
               <td class="d-flex justify-content-evenly">
                   <a [routerLink]="['./editar', produto.id]" class="btn-primary btn col-6 me-1">

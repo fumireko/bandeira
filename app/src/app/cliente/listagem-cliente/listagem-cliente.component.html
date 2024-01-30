@@ -1,19 +1,22 @@
 <div id="content" *ngIf="urlPedido === ''">
-  <h1 *ngIf="!finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3" id="topo">Categorias</h1>
+  <h1 *ngIf="!finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3 fw-semibold" id="topo">Categorias</h1>
   <hr *ngIf="!finalizarPedido">
   
   <div *ngIf="temItens() && !finalizarPedido"  class="position-fixed top-100 start-50 translate-middle pb-5 mb-5" style="z-index: 99">
-    <a class="btn btn-circle btn-success" href="#carrinho" (click)="finalizarPedido = true">
-      <i class="fa fa-cart-shopping"></i> Finalizar pedido
+    <a class="btn btn-circle btn-success me-2" href="#carrinho" (click)="finalizarPedido = true">
+      <i class="fa-solid fa-basket-shopping"></i> Finalizar pedido
+    </a>
+    <a href="#carrinho" class="btn btn-primary ms-2">
+      <i class="fa fa-cart-shopping"></i> Ver carrinho <span class="badge text-bg-danger">{{ countItensPedido() }}</span>
     </a>
   </div>
   
   <div *ngIf="!finalizarPedido" class="d-flex justify-content-center mx-auto">
     <div class="row w-100">
       <div class="accordion w-100" id="accordion">
-        <div *ngFor="let categoria of categorias" class="accordion-item">
+        <div *ngFor="let categoria of categoriasUnitario" class="accordion-item">
           <h2 class="accordion-header">
-            <button class="accordion-button collapsed" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + categoria.id">
+            <button class="accordion-button collapsed bg-custom" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + categoria.id">
               {{categoria.descricao}}
             </button>
           </h2>
@@ -36,6 +39,41 @@
             </div>
           </div>
         </div>
+        <div *ngFor="let categoria of categoriasPeso" class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-custom2" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + categoria.id">
+              {{categoria.descricao}}
+            </button>
+          </h2>
+          <div [id]="'collapse' + categoria.id" class="accordion-collapse collapse hide" data-bs-parent="#accordion">
+            <div class="accordion-body row row-cols-2 row-cols-md-0 g-3">
+              <div class="col card" *ngFor="let produto of produtosCategoria[checkUndefined(categoria.id)]">
+                <img src="{{produto.imagem}}" class="card-img-top img-fluid" loading="lazy">
+                <div class="card-body px-1 m-0">
+                  <h5 class="card-title">R{{produto.preco | currency}}</h5>
+                  <p class="card-text">{{produto.nome}}</p>
+                  <button *ngIf="checkUndefined(getQuantidade(produto)) == undefined" class="btn btn-primary" (click)="adicionarPeso(produto)">
+                    <i class="fa-solid fa-basket-shopping"></i> Adicionar
+                  </button>
+                  <div *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="input-group area-input-group-cart">
+                    <span class="input-group-addon pl-1 border-right-0 bg-white pr-0 badge-pill">
+                        <button class="btn btn-outline-secondary" (click)="removerPeso(produto)">
+                            <i *ngIf="checkUndefined(getQuantidade(produto)) > 0.1" class="fas fa-minus"></i>
+                            <i *ngIf="checkUndefined(getQuantidade(produto)) == 0.1" class="fas fa-trash"></i>
+                        </button>
+                    </span>
+                    <input type="text" name="quantidadeSelecionada" [value]="getQuantidadeFormatada(produto)" aria-label="quantidade selecionada" disabled class="form-control">
+                    <span class="input-group-addon pr-1 border-left-0 bg-white pl-0 badge-pill">
+                        <button class="btn btn-outline-secondary" (click)="adicionarPeso(produto)">
+                            <i aria-hidden="true" class="fas fa-plus"></i>
+                        </button>
+                    </span>
+                  </div>                
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>     
     </div>
   </div>
@@ -43,7 +81,7 @@
   <div class="d-flex justify-content-center">
     <form *ngIf="finalizarPedido" #formPedido="ngForm" (ngSubmit)="enviarPedido()" class="mx-2" style="width: 85vw;">
   
-      <h1 class="mx-auto text-center my-3">Dados do pedido</h1>
+      <h1 class="mx-auto text-center my-3 fw-semibold">Dados do pedido</h1>
       
       <label for="opcaoPagamento">Forma de pagamento:</label>
       <select name="opcaoPagamento" id="opcaoPagamento" class="form-select" [(ngModel)]="pedido.opcaoPagamento" #opcaoPagamento="ngModel">
@@ -115,7 +153,7 @@
           <div [hidden]="!tel_cliente.errors['pattern']">Número de telefone inválido.</div>
       </div>
 
-      <h1 *ngIf="finalizarPedido && pedido.bairro && pedido.cidade" class="mx-auto text-center my-3">Itens do pedido</h1>
+      <h1 *ngIf="finalizarPedido && pedido.bairro && pedido.cidade" class="mx-auto text-center my-3 fw-semibold">Itens do pedido</h1>
 
       <table *ngIf="finalizarPedido && pedido.bairro && pedido.cidade" class="table table-secondary table-bordered table-hover my-3 pb-5">
         <tbody>
@@ -126,9 +164,9 @@
             </tr>
             <tr *ngFor="let item of itens" class="text-center table-light">
               <ng-container *ngIf="item.quantidade > 0">
-                <td>{{ item.quantidade }}</td>
+                <td>{{ item.quantidade | number: '1.1-1' }}</td>
                 <td>{{ item.produto?.nome }}</td>
-                <td>{{ item.produto?.preco }}</td>
+                <td>{{ calcularSubtotal(item) | currency: 'BRL':true:'1.2-2' }}</td>
               </ng-container>
             </tr>
             <tr *ngIf="pedido.bairro && pedido.cidade" class="fw-semibold">
@@ -142,12 +180,17 @@
         </tbody>
       </table>
   
-      <button type="submit" class="btn btn-primary col-12 mt-3 mb-5 py-3" [disabled]="!formPedido.valid">Enviar pedido</button>
+      <button type="submit"
+            class="btn btn-primary col-12 mt-3 mb-5 py-3"
+            [disabled]="!formPedido.valid"
+            [ngClass]="{'btn-outline-secondary': !formPedido.valid}">
+      Enviar pedido
+      </button>
     
     </form>
   </div>
 
-  <h1 *ngIf="!finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3" id="carrinho">Carrinho</h1>
+  <h1 *ngIf="!finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3 fw-semibold" id="carrinho">Carrinho</h1>
   <hr>
   
   <table *ngIf="!finalizarPedido" class="table table-bordered table-hover mb-5 pb-5">
@@ -155,12 +198,12 @@
         <tr class="text-center">
           <th>Quantidade</th>
           <th>Produto</th>
-          <th>Preço</th>
+          <th>Subtotal</th>
         </tr>
         <tr *ngFor="let item of itens" class="text-center">
-          <td>{{ item.quantidade }}</td>
+          <td>{{ item.quantidade | number: '1.1-1' }}</td>
           <td>{{ item.produto?.nome }}</td>
-          <td>{{ item.produto?.preco }}</td>
+          <td>{{ calcularSubtotal(item) | currency: 'BRL':true:'1.2-2' }}</td>
         </tr>
         <tr class="fw-bold">
           <td colspan="2">Total</td>

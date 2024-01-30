@@ -18,14 +18,16 @@ export class InserirCategoriaComponent {
     private router: Router,
   ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.categoria.unidade = false;
+  }
 
   inserir(): void {
     if (this.formCategoria.form.valid) {
       this.categoriaService.inserir(this.categoria).subscribe({
         next: (res: any) => {
           alert("Inserido com sucesso.");
-          this.router.navigate(['../']);
+          this.router.navigate(['/categorias']);
         },
         error: (error: any) => {
           alert("Erro ao inserir a categoria: " + JSON.stringify(error));

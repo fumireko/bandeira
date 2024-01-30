@@ -2,3 +2,11 @@
     position: fixed; 
     z-index: 99; 
 }
+
+.bg-custom {
+    background-color: #EEF2FF !important;
+}
+
+.bg-custom2 {
+    background-color: #E6ECFF !important;
+}

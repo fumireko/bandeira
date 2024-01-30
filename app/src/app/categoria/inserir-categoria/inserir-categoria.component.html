@@ -1,14 +1,25 @@
-<h1 class="text-center titulo-tela my-5">Inserir Categoria</h1>
+<h1 class="text-center titulo-tela my-5 fw-semibold">Inserir Categoria</h1>
 <div *ngIf="categoria" class="well d-flex justify-content-center">
     <form #formCategoria="ngForm" class="w-50">
     
         <div class="form-group mb-3">
             <label for="descricao">Descrição da categoria:</label>
-            <input type="text" class="form-control" id="descricao" name="descricao" [(ngModel)]="categoria.descricao" #descricao="ngModel"
-                minlength="2" required>
+            <input type="text" class="form-control" id="descricao" name="descricao" [(ngModel)]="categoria.descricao" #descricao="ngModel" minlength="2" required>
             <div *ngIf="descricao.errors && (descricao.dirty || descricao.touched)" class="alert alert-danger">
                 <div [hidden]="!descricao.errors['required']">Digite a descrição da categoria</div>
                 <div [hidden]="!descricao.errors['minlength']">A descrição deve conter pelo menos 2 caracteres.</div>
+            </div>
+        </div>
+        
+        <div class="form-group mb-3">
+            <label for="unidade">Unidade:</label>
+            <div class="form-check">
+                <input type="radio" id="unitario" name="unidade" [(ngModel)]="categoria.unidade" [value]="false" class="form-check-input">
+                <label class="form-check-label" for="unitario">Unitário</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" id="peso" name="unidade" [(ngModel)]="categoria.unidade" [value]="true" class="form-check-input">
+                <label class="form-check-label" for="peso">Peso (g)</label>
             </div>
         </div>
 

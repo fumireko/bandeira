@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'Mercado Bandeira';
   public static chaveAcesso = '123';
-  public static backendURL = 'http://10.0.0.14:8081';
+  public static backendURL = 'http://localhost:8081';
   public static siteUrl = 'http://fubi.ca';
   public static fretesRBS = [
     { bairro: "Centro - Rio Branco do Sul", precoFrete: 5.00 },

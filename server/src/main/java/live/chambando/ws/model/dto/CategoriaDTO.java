@@ -11,6 +11,7 @@ public class CategoriaDTO implements Serializable {
 
 	private long id;
 	private String descricao;
+	private boolean unidade;
 	
 	public CategoriaDTO(String descricao) {
 		this.setDescricao(descricao);
@@ -36,4 +37,11 @@ public class CategoriaDTO implements Serializable {
 		this.descricao = descricao;
 	}
 	
+	public boolean isUnidade() {
+		return unidade;
+	}
+	
+	public void setUnidade(boolean unidade) {
+		this.unidade = unidade;
+	}
 }

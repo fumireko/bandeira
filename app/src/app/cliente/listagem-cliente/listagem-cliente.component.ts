@@ -20,7 +20,8 @@ export class ListagemClienteComponent {
   @ViewChild("formPedido") formPedido!: NgForm;
   @Input() produto?: Produto;
   produtos: Produto[] = [];
-  categorias: Categoria[] = [];
+  categoriasPeso: Categoria[] = [];
+  categoriasUnitario: Categoria[] = [];
   produtosCategoria: Produto[][] = [];
   finalizarPedido: boolean = false;
   urlPedido: string | undefined = "";
@@ -36,10 +37,28 @@ export class ListagemClienteComponent {
               private categoriaService: CategoriaService){}
 
   ngOnInit() {
-    this.categoriaService.listarTodas().subscribe(
+    this.categoriaService.listarUnitario().subscribe(
       (data) => {
-        this.categorias = data;
-        for (let categoria of this.categorias) {
+        this.categoriasUnitario = data;
+        for (let categoria of this.categoriasUnitario) {
+          this.produtoService.listarAtivos(categoria.id).subscribe(
+            (produtos) => {
+              if(categoria.id) this.produtosCategoria[categoria.id] = produtos;
+            },
+            (error) => {
+              console.error(`Erro ao carregar produtos da categoria ${categoria.id}`);
+            }
+          );
+        }
+      },
+      (error) => {
+        console.error("Erro ao carregar as categorias");
+      }
+    );
+    this.categoriaService.listarPeso().subscribe(
+      (data) => {
+        this.categoriasPeso = data;
+        for (let categoria of this.categoriasPeso) {
           this.produtoService.listarAtivos(categoria.id).subscribe(
             (produtos) => {
               if(categoria.id) this.produtosCategoria[categoria.id] = produtos;
@@ -105,6 +124,35 @@ export class ListagemClienteComponent {
     console.log(JSON.stringify(this.itens));
   }
 
+  adicionarPeso(produto: Produto){
+    const item = this.itens?.find(
+      item => item.produto?.id === produto.id
+    );
+    
+    if (item) item.quantidade = (item.quantidade ?? 0) + 0.1; 
+
+    else {
+      this.itens?.push({
+          quantidade: 0.1,
+          produto: produto,
+      });
+    }
+  }
+
+  removerPeso(produto: Produto){
+    const item = this.itens?.find(
+      item => item.produto?.id === produto.id
+    );
+
+    if (item) item.quantidade = (item.quantidade ?? 0.1) - 0.1;
+
+    else this.itens.filter(
+      item => item.produto?.id !== produto.id
+    );
+
+    console.log(JSON.stringify(this.itens));
+  }
+
   selecionarCategoria(id: number | undefined){
     this.produtoService.listarTodos(id).subscribe(
       (data) => {console.log(data)}
@@ -131,5 +179,27 @@ export class ListagemClienteComponent {
     return this.itens ? this.itens.length > 0 : false;
   }
 
+  getQuantidadeFormatada(produto: Produto): string {
+    const quantidade = this.checkUndefined(this.getQuantidade(produto));
+    
+    if (quantidade && quantidade > 0) {
+      const quantidadeArredondada = this.checkUndefined(this.round(quantidade * 1000));
+      return quantidadeArredondada ? `${quantidadeArredondada}g selecionados` : '';
+    }
+  
+    return '';
+  }  
+
+  calcularSubtotal(item: ItemPedido){
+    return this.checkUndefined(item.produto?.preco) * item.quantidade;
+  }
+
+  countItensPedido(): number { return this.itens.length }
+
   checkUndefined(a: any) {if(a) return a;}
+
+  round(a: any): number{
+    if(a) return Math.round(a);
+    else return 0;
+  }
 }
