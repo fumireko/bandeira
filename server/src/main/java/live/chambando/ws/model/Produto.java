@@ -37,6 +37,9 @@ public class Produto implements Serializable{
 	@Column(name="imagem_produto", length=1024)
     private String imagem;
 	
+	@Column(name="produto_disponivel")
+    private boolean disponivel;
+	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="fkCategoria")
 	private Categoria categoria;
@@ -81,5 +84,11 @@ public class Produto implements Serializable{
 	}
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
+	}
+	public boolean isDisponivel() {
+		return disponivel;
+	}
+	public void setDisponivel(boolean disponivel) {
+		this.disponivel = disponivel;
 	}
 }

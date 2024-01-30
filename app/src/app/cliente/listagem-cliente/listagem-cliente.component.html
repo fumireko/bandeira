@@ -1,5 +1,5 @@
 <div id="content" *ngIf="urlPedido === ''">
-  <h1 *ngIf="!finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3" id="topo">Produtos</h1>
+  <h1 *ngIf="!finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3" id="topo">Categorias</h1>
   <hr *ngIf="!finalizarPedido">
   
   <div *ngIf="temItens() && !finalizarPedido"  class="position-fixed top-100 start-50 translate-middle pb-5 mb-5" style="z-index: 99">
@@ -13,11 +13,11 @@
       <div class="accordion w-100" id="accordion">
         <div *ngFor="let categoria of categorias" class="accordion-item">
           <h2 class="accordion-header">
-            <button class="accordion-button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + categoria.id">
+            <button class="accordion-button collapsed" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + categoria.id">
               {{categoria.descricao}}
             </button>
           </h2>
-          <div [id]="'collapse' + categoria.id" class="accordion-collapse collapse show" data-bs-parent="#accordion">
+          <div [id]="'collapse' + categoria.id" class="accordion-collapse collapse hide" data-bs-parent="#accordion">
             <div class="accordion-body row row-cols-2 row-cols-md-0 g-3">
               <div class="col card" *ngFor="let produto of produtosCategoria[checkUndefined(categoria.id)]">
                 <img src="{{produto.imagem}}" class="card-img-top img-fluid" loading="lazy">

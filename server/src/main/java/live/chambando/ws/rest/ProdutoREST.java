@@ -51,6 +51,30 @@ public class ProdutoREST {
 	        return ResponseEntity.ok(produtosDTO);
 	    }
 	}
+	
+	@GetMapping("/produtos/ativos")
+	public ResponseEntity<List<ProdutoDTO>> obterProdutosAtivos(@RequestParam(name = "categoria", required = false) Long categoriaId) {
+	    List<ProdutoDTO> produtosDTO;
+
+	    if (categoriaId != null) {
+	        Optional<Categoria> categoriaOptional = categoriaRepository.findById(categoriaId);
+	        if (categoriaOptional.isEmpty())
+	            return ResponseEntity.notFound().build();
+
+	        produtosDTO = produtoRepository.findByCategoria(categoriaOptional.get()).stream()
+	                .filter(Produto::isDisponivel)
+	                .map(produto -> mapper.map(produto, ProdutoDTO.class))
+	                .collect(Collectors.toList());
+	    } else {
+	        produtosDTO = produtoRepository.findAll().stream()
+	                .filter(Produto::isDisponivel)
+	                .map(produto -> mapper.map(produto, ProdutoDTO.class))
+	                .collect(Collectors.toList());
+	    }
+
+	    return ResponseEntity.ok(produtosDTO);
+	}
+
     
     @GetMapping("/produtos/{id}")
     public ResponseEntity<Produto> obterProdutoPorId(@PathVariable("id") int id) {
@@ -88,7 +112,8 @@ public class ProdutoREST {
     	Optional<Produto> optionalProduto = produtoRepository.findById(id);
         if (optionalProduto.isPresent()) {
         	Produto produto = optionalProduto.get();
-            produtoRepository.delete(produto);
+        	produto.setDisponivel(false);
+            produtoRepository.save(produto);
             return ResponseEntity.ok(mapper.map(produto, ProdutoDTO.class));
         } else {
             return ResponseEntity.notFound().build();

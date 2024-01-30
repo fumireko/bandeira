@@ -1,0 +1,20 @@
+.title {
+    color: #E8E8F7;
+    font-family: bauhaus;
+    text-decoration: none !important;
+    vertical-align: middle;
+}
+
+.logo {
+    width: 12%;
+    height: auto;
+}
+
+.bg-custom {
+    background-color: #0087C9 !important;
+}
+
+@font-face {
+    font-family: bauhaus;
+    src: url("/assets/bauhaus-93.ttf");
+}

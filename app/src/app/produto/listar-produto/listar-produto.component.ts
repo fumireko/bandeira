@@ -79,5 +79,9 @@ export class ListarProdutoComponent implements OnInit {
       });
     }
   }
+
+  checkUndefined(e: any){
+    if(e) return e;
+  }
   
 }

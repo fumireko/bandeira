@@ -1,18 +1,15 @@
-<nav class="navbar navbar-expand-lg bg-body-secondary">
-    <div class="container-fluid">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/pedidos']">Pedidos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" [routerLink]="['/produtos']">Produtos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/categorias']">Categorias</a>
-            </li>
-        </ul>    
-    </div>
-</nav>
+
+<ul class="nav nav-tabs me-auto mb-2 mb-lg-0 mt-0 pt-0 bg-custom">
+    <li class="nav-item">
+        <a class="nav-link mt-1 mx-1 " [routerLink]="['/pedidos']">Pedidos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active mt-1 mx-1 " [routerLink]="['/produtos']">Produtos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link mt-1 mx-1 " [routerLink]="['/categorias']">Categorias</a>
+    </li>
+</ul>    
 
 <body>
     <h1 style="width: 70vw;" class="mx-auto text-start mt-5">Listagem de Produtos</h1>
@@ -68,6 +65,12 @@
                     <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'preco' && ordemAscendente"></i>
                     <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'preco' && !ordemAscendente"></i>
                 </th>
+                <th (click)="alternarOrdem('disponivel')">
+                    Status
+                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'disponivel'"></i>
+                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'disponivel' && ordemAscendente"></i>
+                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'disponivel' && !ordemAscendente"></i>
+                </th>
                 <th class="text-center">
                     <a [routerLink]="['./inserir']" class="btn-success btn">
                         <i class="fa fa-plus" aria-hidden="true"></i>
@@ -77,18 +80,24 @@
             <tr *ngFor="let produto of filtrados" class="text-center">
               <td>{{produto.id}}</td>
               <td *ngIf="mostrarImagens">
-                <span class="text-danger fw-bold"><img *ngIf="produto.imagem" [src]="produto.imagem" alt="Imagem inválida" class="img-fluid" loading="lazy"></span>
+                <span class="text-danger fw-bold"><img *ngIf="produto.imagem" [src]="produto.imagem" alt="Imagem inválida" class="img-fluid w-50" loading="lazy"></span>
               </td>              
               <td class="text-start">{{produto.nome}}</td>
               <td>{{produto.categoria?.descricao}}</td>
-              <td>R{{produto.preco | currency }}</td>
+              <td>R{{produto.preco | currency }}</td>  
+              <td [ngClass]="{'text-success': produto.disponivel, 'text-danger': !produto.disponivel}">
+                {{ produto.disponivel ? 'Ativo' : 'Inativo' }}
+              </td>              
               <td class="d-flex justify-content-evenly">
                   <a [routerLink]="['./editar', produto.id]" class="btn-primary btn col-6 me-1">
                       <i class="fa fa-edit" aria-hidden="true"></i>
                   </a>
                   <br>
-                  <a (click)="remover(produto)" class="btn-danger btn col-6">
-                      <i class="fa fa-times" aria-hidden="true"></i>
+                  <a *ngIf="produto.disponivel" (click)="remover(produto)" class="btn-danger btn col-6">
+                      <i class="fa fa-trash-can" aria-hidden="true"></i>
+                  </a>
+                  <a *ngIf="!produto.disponivel" (click)="remover(produto)" class="btn-success btn col-6">
+                    <i class="fa fa-trash-can-arrow-up" aria-hidden="true"></i>
                   </a>
               </td>
             </tr>

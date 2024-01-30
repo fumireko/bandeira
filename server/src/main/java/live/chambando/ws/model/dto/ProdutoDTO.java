@@ -16,12 +16,14 @@ public class ProdutoDTO implements Serializable{
     private double preco;
     private String imagem;
     private Categoria categoria;
+    private boolean disponivel;
     
     public ProdutoDTO(String nome, double preco, String imagem, Categoria categoria) {
 		this.setNome(nome);
 		this.setPreco(preco);
 		this.setImagem(imagem);
 		this.setCategoria(categoria);
+		this.setDisponivel(true);
 	}
     
     public ProdutoDTO() {
@@ -57,5 +59,11 @@ public class ProdutoDTO implements Serializable{
 	}
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
+	}
+	public boolean isDisponivel() {
+		return disponivel;
+	}
+	public void setDisponivel(boolean disponivel) {
+		this.disponivel = disponivel;
 	}
 }

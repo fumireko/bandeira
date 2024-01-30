@@ -40,7 +40,7 @@ export class ListagemClienteComponent {
       (data) => {
         this.categorias = data;
         for (let categoria of this.categorias) {
-          this.produtoService.listarTodos(categoria.id).subscribe(
+          this.produtoService.listarAtivos(categoria.id).subscribe(
             (produtos) => {
               if(categoria.id) this.produtosCategoria[categoria.id] = produtos;
             },

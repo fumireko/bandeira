@@ -7,6 +7,7 @@ export class Produto {
         public nome?: string,
         public preco?: number,
         public imagem?: string,
-        public categoria?: Categoria
+        public categoria?: Categoria,
+        public disponivel?: boolean
     ){}
 }

@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,12 +23,41 @@ export class InserirProdutoComponent implements OnInit {
     private categoriaService: CategoriaService,
     private route: ActivatedRoute,
     private router: Router,
+    private http: HttpClient
   ) { }
 
   ngOnInit(): void {
     this.categoriaService.listarTodas().subscribe(categorias => {
       this.categorias = categorias;
     });
+  }
+
+  onImagePaste(event: any): void {
+    const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+    let blob = null;
+    for (const item of items) {
+      if (item.type.indexOf('image') === 0) {
+        this.uploadImage(item.getAsFile());
+      }
+    }
+  }
+
+  uploadImage(file: File): void {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    this.http.post<any>('http://fubi.ca/upload_json.php', formData).subscribe(
+      (response) => {
+        if (response && response.path) {
+          this.produto.imagem = response.path;
+        } else {
+          console.error('Error: "path" property not found or invalid in the response.');
+        }
+      },
+      (error) => {
+        console.error('Error uploading file:', error);
+      }
+    );
   }
 
   inserir(): void {

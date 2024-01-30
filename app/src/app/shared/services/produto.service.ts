@@ -19,6 +19,13 @@ export class ProdutoService {
     return this.http.get<Produto[]>(url);
   }
 
+  listarAtivos(categoria_id?: number): Observable<Produto[]> {
+    let url = `${AppComponent.backendURL}/produtos/ativos`;
+    if (categoria_id !== undefined)
+      url += `?categoria=${categoria_id}`;
+    return this.http.get<Produto[]>(url);
+  }
+
   inserir(produto: Produto){
     return this.http.post<Produto>(`${AppComponent.backendURL}/produtos`, produto);
   }
