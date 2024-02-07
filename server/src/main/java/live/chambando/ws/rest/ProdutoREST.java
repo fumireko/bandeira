@@ -112,7 +112,8 @@ public class ProdutoREST {
     	Optional<Produto> optionalProduto = produtoRepository.findById(id);
         if (optionalProduto.isPresent()) {
         	Produto produto = optionalProduto.get();
-        	produto.setDisponivel(false);
+        	if(produto.isDisponivel()) produto.setDisponivel(false);
+        	else produto.setDisponivel(true); 
             produtoRepository.save(produto);
             return ResponseEntity.ok(mapper.map(produto, ProdutoDTO.class));
         } else {

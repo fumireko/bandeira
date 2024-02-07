@@ -15,14 +15,21 @@
     <h1 style="width: 70vw;" class="mx-auto text-start mt-3 fw-semibold">Listagem de Produtos</h1>
 
     <div class="row mx-auto" style="width: 70vw;">
-        <div class="mb-3 mx-auto" style="width: 35vw;">
-            <div class="form-check m-0 pt-3">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="mostrarImagens">
-                <label class="form-check-label" for="chkExibirImagens">Exibir Imagens</label>
+        <div class="mb-3" style="width: 35vw;">
+            <div class="row">
+                <div class="form-check m-0 pt-3 col-6">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="mostrarImagens">
+                    <label class="form-check-label">Exibir Imagens</label>
+                </div>
+    
+                <div class="form-check m-0 pt-3 col-6">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="mostrarIndisponiveis" (change)="atualizarListagem()">
+                    <label class="form-check-label">Mostrar indisponíveis</label>
+                </div>
             </div>
         </div>
     
-        <div class="mb-3 mx-auto input-group" style="width: 35vw;">
+        <div class="mb-3 input-group" style="width: 35vw;">
             <input type="text" class="form-control mt-2" style="width: 67%" placeholder="Buscar produtos"
             [(ngModel)]="termoBusca" (input)="filtrarProdutos()">
             <select class="form-select mt-2" id="categoria" name="categoria" style="width: 33%" [(ngModel)]="categoriaDescricao" (change)="filtrarProdutos()">

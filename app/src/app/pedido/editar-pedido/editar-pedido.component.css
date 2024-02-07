@@ -1,0 +1,12 @@
+.bg-custom {
+    background-color: #4D70BC !important;
+}
+
+.nav-link {
+    color: #bbcafe !important;
+}
+
+.active {
+    color: #4D70BC !important;
+    background-color: white !important;
+}

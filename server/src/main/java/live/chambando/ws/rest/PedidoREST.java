@@ -49,18 +49,18 @@ public class PedidoREST {
     
     @PostMapping("/pedidos")
     public ResponseEntity<PedidoDTO> inserirPedido(@RequestBody Pedido pedido) {
-    	pedido.setUrlPedido(criarUrlPedido(pedido));
-    	pedido.setDataCriado(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now()));
-    	System.out.println(pedido.toString());
-    	pedidoRepository.save(pedido);
-        pedido.getItens().forEach(e -> itemPedidoRepository.save(e));
-        for (ItemPedido itemPedido : pedido.getItens()) {
-        	System.out.println(itemPedido.getId());
-            itemPedido.setPedido(pedido);
-            itemPedidoRepository.save(itemPedido);
-        }
-        PedidoDTO pedidoDTO = mapper.map(pedido, PedidoDTO.class);
-		return ResponseEntity.status(HttpStatus.CREATED).body(pedidoDTO);
+        pedido.setDataCriado(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now()));
+        System.out.println(pedido.toString());
+        Pedido pedidoSalvo = pedidoRepository.save(pedido);
+        pedidoSalvo.setUrlPedido(criarUrlPedido(pedidoSalvo, pedidoSalvo.getId()));
+        pedidoRepository.save(pedidoSalvo);
+        pedido.getItens().forEach(e -> {
+            e.setPedido(pedidoSalvo);
+            itemPedidoRepository.save(e);
+        });
+
+        PedidoDTO pedidoDTO = mapper.map(pedidoSalvo, PedidoDTO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoDTO);
     }
 
     @PutMapping("/pedidos/{id}")
@@ -131,7 +131,7 @@ public class PedidoREST {
         } else return ResponseEntity.notFound().build();
     }
     
-    private String criarUrlPedido(Pedido pedido) {
+    private String criarUrlPedido(Pedido pedido, Long pedidoID) {
         List<ItemPedido> itens = pedido.getItens();
         BigDecimal precoFrete = BigDecimal.valueOf(pedido.getPrecoFrete());
         BigDecimal total = totalPedido(itens).add(precoFrete);
@@ -142,9 +142,10 @@ public class PedidoREST {
         String dadosRetirada = String.format("   Nome: %s\n   Telefone: %s\n   Endereço: %s %s, %s - %s",
                 pedido.getNome_cliente(), pedido.getTel_cliente(), pedido.getLogradouro(), pedido.getNumeroPredial(), pedido.getBairro(), pedido.getCidade());
         String pagamento = String.format("   PAGAMENTO %s", pedido.getOpcaoPagamento().toUpperCase());
+        System.out.println("Novo pedido #" + pedidoID);
         String stringPedido = String.format("✅ NOVO PEDIDO\n\n    Pedido #%d\n\n%s\n\n   FRETE: R$%.2f\n TOTAL: R$%.2f\n\n   ------------------------------\n   ▶ DADOS PARA RETIRADA\n\n%s\n\n   ------------------------------\n   ▶ PAGAMENTO\n\n%s",
                 pedido.getId(), itensPedido, precoFrete, total, dadosRetirada, pagamento);
-        String url = "https://api.whatsapp.com/send?phone=41996110756&text=" + encodeURIComponent(stringPedido);
+        String url = "https://api.whatsapp.com/send?phone=41999317394&text=" + encodeURIComponent(stringPedido);
         System.out.println(url);
         pedido.setTotalPedido(total.doubleValue());
 

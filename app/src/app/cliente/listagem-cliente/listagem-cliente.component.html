@@ -2,12 +2,12 @@
   <h1 *ngIf="!finalizarPedido" style="width: 70vw;" class="mx-auto text-center my-3 fw-semibold" id="topo">Categorias</h1>
   <hr *ngIf="!finalizarPedido">
   
-  <div *ngIf="temItens() && !finalizarPedido"  class="position-fixed top-100 start-50 translate-middle pb-5 mb-5" style="z-index: 99">
-    <a class="btn btn-circle btn-success me-2" href="#carrinho" (click)="finalizarPedido = true">
-      <i class="fa-solid fa-basket-shopping"></i> Finalizar pedido
+  <div *ngIf="temItens() && !finalizarPedido" class="btn-bar">
+    <a class="btn btn-circle btn-success mb-3" href="#carrinho" (click)="finalizarPedido = true">
+      <i class="fa-solid fa-basket-shopping"></i> Finalizar
     </a>
-    <a href="#carrinho" class="btn btn-primary ms-2">
-      <i class="fa fa-cart-shopping"></i> Ver carrinho <span class="badge text-bg-danger">{{ countItensPedido() }}</span>
+    <a href="#carrinho" class="btn btn-circle btn-primary mb-3">
+      <i class="fa fa-cart-shopping"></i> Itens <span class="badge text-bg-danger">{{ countItensPedido() }}</span>
     </a>
   </div>
   
@@ -24,10 +24,12 @@
             <div class="accordion-body row row-cols-2 row-cols-md-0 g-3">
               <div class="col card" *ngFor="let produto of produtosCategoria[checkUndefined(categoria.id)]">
                 <img src="{{produto.imagem}}" class="card-img-top img-fluid" loading="lazy">
-                <div class="card-body px-1 m-0">
-                  <h5 class="card-title">R{{produto.preco | currency}}</h5>
-                  <p class="card-text">{{produto.nome}}</p>
+                <h1 class="card-title fw-bold text-center">R{{produto.preco | currency}}</h1>
+                <div class="px-2 mb-3">
+                  <p class="card-text text-center fs-5">{{produto.nome}}</p>
                   <p *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="fw-bold">{{ getQuantidade(produto) }} itens selecionados</p>
+                </div>
+                <div class="card-footer d-flex justify-content-center">
                   <button class="btn btn-primary" (click)="adicionar(produto)">
                     <i class="fa-solid fa-basket-shopping"></i> Adicionar
                   </button>
@@ -49,22 +51,24 @@
             <div class="accordion-body row row-cols-2 row-cols-md-0 g-3">
               <div class="col card" *ngFor="let produto of produtosCategoria[checkUndefined(categoria.id)]">
                 <img src="{{produto.imagem}}" class="card-img-top img-fluid" loading="lazy">
-                <div class="card-body px-1 m-0">
-                  <h5 class="card-title">R{{produto.preco | currency}}</h5>
-                  <p class="card-text">{{produto.nome}}</p>
+                <h1 class="card-title fw-bold text-center">R{{produto.preco | currency}}</h1>
+                <div class="px-2 mb-3">
+                  <p class="card-text text-center fs-5">{{produto.nome}}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-center m-1 p-1">
                   <button *ngIf="checkUndefined(getQuantidade(produto)) == undefined" class="btn btn-primary" (click)="adicionarPeso(produto)">
                     <i class="fa-solid fa-basket-shopping"></i> Adicionar
                   </button>
-                  <div *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="input-group area-input-group-cart">
+                  <div *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="input-group input-group-sm area-input-group-cart">
                     <span class="input-group-addon pl-1 border-right-0 bg-white pr-0 badge-pill">
-                        <button class="btn btn-outline-secondary" (click)="removerPeso(produto)">
+                        <button class="btn btn-sm btn-outline-secondary" (click)="removerPeso(produto)">
                             <i *ngIf="checkUndefined(getQuantidade(produto)) > 0.1" class="fas fa-minus"></i>
                             <i *ngIf="checkUndefined(getQuantidade(produto)) == 0.1" class="fas fa-trash"></i>
                         </button>
                     </span>
-                    <input type="text" name="quantidadeSelecionada" [value]="getQuantidadeFormatada(produto)" aria-label="quantidade selecionada" disabled class="form-control">
+                    <input type="text" name="quantidadeSelecionada" [value]="getQuantidadeFormatada(produto)" aria-label="quantidade selecionada" class="form-control fw-semibold" readonly>
                     <span class="input-group-addon pr-1 border-left-0 bg-white pl-0 badge-pill">
-                        <button class="btn btn-outline-secondary" (click)="adicionarPeso(produto)">
+                        <button class="btn btn-sm btn-outline-secondary" (click)="adicionarPeso(produto)">
                             <i aria-hidden="true" class="fas fa-plus"></i>
                         </button>
                     </span>
@@ -95,9 +99,9 @@
   
       <label for="logradouro">Endereço:</label>
       <div class="input-group">
-          <input type="text" class="form-control" id="logradouro" name="logradouro" [(ngModel)]="pedido.logradouro" #logradouro="ngModel" minlength="3" placeholder="Rua 1" required>
+          <input type="text" class="form-control" id="logradouro" name="logradouro" [(ngModel)]="pedido.logradouro" #logradouro="ngModel" minlength="3" required>
           <span class="input-group-text">Nº</span>
-          <input type="number" class="form-control" id="numeroPredial" name="numeroPredial" [(ngModel)]="pedido.numeroPredial" #numeroPredial="ngModel" placeholder="123" required> 
+          <input type="number" class="form-control" id="numeroPredial" name="numeroPredial" [(ngModel)]="pedido.numeroPredial" #numeroPredial="ngModel" required> 
       </div>
       <div *ngIf="logradouro.errors && (logradouro.dirty || logradouro.touched)" class="alert alert-danger">
         <div [hidden]="!logradouro.errors['required']">Digite o logradouro.</div>

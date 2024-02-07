@@ -1,15 +1,15 @@
 <body>
-    <ul class="nav nav-tabs mt-1">
+    <ul class="nav nav-tabs me-auto mb-2 mb-lg-0 mt-0 pt-0 bg-custom">
         <li class="nav-item">
-          <a *ngIf="layout === 'itens'" class="nav-link active" (click)="view('itens')">Itens do pedido</a>
-          <a *ngIf="layout === 'dados'" class="nav-link" (click)="view('itens')">Itens do pedido</a>
+            <a *ngIf="layout === 'itens'" class="nav-link mt-1 mx-1 active" (click)="view('itens')">Itens do pedido</a>
+            <a *ngIf="layout === 'dados'" class="nav-link mt-1 mx-1" (click)="view('itens')">Itens do pedido</a>
         </li>
         <li class="nav-item">
-          <a *ngIf="layout === 'dados'" class="nav-link active" (click)="view('dados')">Dados do pedido</a>
-          <a *ngIf="layout === 'itens'" class="nav-link" (click)="view('dados')">Dados do pedido</a>
+            <a *ngIf="layout === 'dados'" class="nav-link mt-1 mx-1 active" (click)="view('dados')">Dados do pedido</a>
+            <a *ngIf="layout === 'itens'" class="nav-link mt-1 mx-1" (click)="view('dados')">Dados do pedido</a>
         </li>
-    </ul>
-
+    </ul>    
+    
     <h1 style="width: 70vw;" class="mx-auto text-start mt-5 fw-semibold">Pedido #{{ pedido.id }}</h1>
 
     <div *ngIf="layout === 'itens'" class="row mx-auto" style="width: 70vw;">

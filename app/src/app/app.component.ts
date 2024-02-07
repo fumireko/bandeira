@@ -8,8 +8,8 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'Mercado Bandeira';
   public static chaveAcesso = '123';
-  public static backendURL = 'http://localhost:8081';
-  public static siteUrl = 'http://fubi.ca';
+  public static backendURL = 'http://api.mercadobandeira.com:8081';
+  public static siteUrl = 'http://img.mercadobandeira.com';
   public static fretesRBS = [
     { bairro: "Centro - Rio Branco do Sul", precoFrete: 5.00 },
     { bairro: "Jardim Itacuri", precoFrete: 5.00 },

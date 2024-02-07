@@ -16,6 +16,7 @@ export class ListarProdutoComponent implements OnInit {
   categorias: Categoria[] = [];
   filtrados: Produto[] = [];
   mostrarImagens: boolean = true;
+  mostrarIndisponiveis: boolean = true;
   termoBusca: string = "";
   colunaOrdenacao: string = 'id';
   ordemAscendente: boolean = true;
@@ -26,14 +27,11 @@ export class ListarProdutoComponent implements OnInit {
               private categoriaService: CategoriaService) {}
 
   ngOnInit() {
-    this.gerarListagem().subscribe(produtos => {
-      this.produtos = this.filtrados = produtos;
-      this.ordenarProdutos();
-    });
-
+    this.atualizarListagem();
+    
     this.categoriaService.listarTodas().subscribe(categorias => {
       this.categorias = categorias;
-    })
+    });
   }
 
   filtrarProdutos() {
@@ -68,14 +66,32 @@ export class ListarProdutoComponent implements OnInit {
     return this.produtoService.listarTodos();
   }
 
+  gerarListagemAtivos(): Observable<Produto []> {
+    return this.produtoService.listarAtivos();
+  }
+
+  atualizarListagem() {
+    if (this.mostrarIndisponiveis) {
+      // Se a checkbox estiver marcada, listar todos os produtos
+      this.gerarListagem().subscribe(produtos => {
+        this.produtos = this.filtrados = produtos;
+        this.ordenarProdutos();
+        this.filtrarProdutos();
+      });
+    } else {
+      // Se a checkbox estiver desmarcada, listar apenas os produtos ativos
+      this.gerarListagemAtivos().subscribe(produtos => {
+        this.produtos = this.filtrados = produtos;
+        this.ordenarProdutos();
+        this.filtrarProdutos();
+      });
+    }
+  }
+
   remover(produto: Produto) {
     if (window.confirm(`Remover o produto ${produto.nome}?`)) {
       this.produtoService.remover(produto).subscribe(() => {
-        this.gerarListagem().subscribe(produtos => {
-          this.produtos = produtos;
-          this.filtrados = this.produtos;
-          this.filtrarProdutos();
-        });
+        this.atualizarListagem();
       });
     }
   }

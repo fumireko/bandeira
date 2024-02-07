@@ -139,19 +139,22 @@ export class ListagemClienteComponent {
     }
   }
 
-  removerPeso(produto: Produto){
+  removerPeso(produto: Produto) {
     const item = this.itens?.find(
-      item => item.produto?.id === produto.id
+        item => item.produto?.id === produto.id
     );
+    if (item) {
+        item.quantidade = (item.quantidade ?? 0.1) - 0.1;
 
-    if (item) item.quantidade = (item.quantidade ?? 0.1) - 0.1;
-
-    else this.itens.filter(
-      item => item.produto?.id !== produto.id
-    );
-
+        if (item.quantidade <= 0.0000009) {
+            this.itens = this.itens?.filter(
+                item => item.produto?.id !== produto.id
+            );
+        }
+    }
     console.log(JSON.stringify(this.itens));
   }
+
 
   selecionarCategoria(id: number | undefined){
     this.produtoService.listarTodos(id).subscribe(
@@ -184,7 +187,7 @@ export class ListagemClienteComponent {
     
     if (quantidade && quantidade > 0) {
       const quantidadeArredondada = this.checkUndefined(this.round(quantidade * 1000));
-      return quantidadeArredondada ? `${quantidadeArredondada}g selecionados` : '';
+      return quantidadeArredondada ? `${quantidadeArredondada}g` : '';
     }
   
     return '';

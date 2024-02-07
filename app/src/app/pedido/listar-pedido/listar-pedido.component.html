@@ -86,7 +86,7 @@
               <td *ngIf="!pedido.entregue || mostrarEntregues">{{pedido.tel_cliente}}</td>
               <td *ngIf="!pedido.entregue || mostrarEntregues">{{pedido.opcaoPagamento}}</td>
               <td *ngIf="!pedido.entregue || mostrarEntregues">{{pedido.dataCriado}}</td>
-              <td *ngIf="!pedido.entregue || mostrarEntregues" [ngClass]="{'text-success': pedido.entregue, 'text-danger': !pedido.entregue }">{{ pedido.entregue ? pedido.dataEntregue : 'Não entregue' }}</td>
+              <td *ngIf="!pedido.entregue || mostrarEntregues" [ngClass]="{'text-success': pedido.entregue, 'text-danger': !pedido.entregue }">{{ pedido.entregue ? pedido.dataEntregue  : 'Não entregue' }}</td>
               <td *ngIf="!pedido.entregue || mostrarEntregues" class="d-flex justify-content-evenly">
                   <a [routerLink]="['./editar', pedido.id]" class="btn-primary btn col-6 me-1">
                       <i class="fa fa-edit" aria-hidden="true"></i>

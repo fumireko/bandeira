@@ -40,6 +40,8 @@ public class PedidoDTO implements Serializable{
 		this.setEntregue(false);
 		this.setPrecoFrete(0);
 		this.setTotalPedido(0);
+		this.setDataCriado("");
+		this.setDataEntregue("");
 	}
 
 	public PedidoDTO() {
