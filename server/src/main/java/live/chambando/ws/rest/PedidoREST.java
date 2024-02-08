@@ -49,18 +49,18 @@ public class PedidoREST {
     
     @PostMapping("/pedidos")
     public ResponseEntity<PedidoDTO> inserirPedido(@RequestBody Pedido pedido) {
-        pedido.setDataCriado(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now()));
-        System.out.println(pedido.toString());
-        Pedido pedidoSalvo = pedidoRepository.save(pedido);
-        pedidoSalvo.setUrlPedido(criarUrlPedido(pedidoSalvo, pedidoSalvo.getId()));
-        pedidoRepository.save(pedidoSalvo);
-        pedido.getItens().forEach(e -> {
-            e.setPedido(pedidoSalvo);
-            itemPedidoRepository.save(e);
-        });
-
-        PedidoDTO pedidoDTO = mapper.map(pedidoSalvo, PedidoDTO.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoDTO);
+    	pedido.setDataCriado(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").format(LocalDateTime.now()));
+    	System.out.println(pedido.toString());
+    	Pedido pedidoSalvo = pedidoRepository.save(pedido);
+    	pedido.setUrlPedido(criarUrlPedido(pedidoSalvo, pedidoSalvo.getId()));
+        pedido.getItens().forEach(e -> itemPedidoRepository.save(e));
+        for (ItemPedido itemPedido : pedido.getItens()) {
+        	System.out.println(itemPedido.getId());
+            itemPedido.setPedido(pedido);
+            itemPedidoRepository.save(itemPedido);
+        }
+        PedidoDTO pedidoDTO = mapper.map(pedido, PedidoDTO.class);
+		return ResponseEntity.status(HttpStatus.CREATED).body(pedidoDTO);
     }
 
     @PutMapping("/pedidos/{id}")

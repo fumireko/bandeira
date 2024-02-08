@@ -1,3 +1,16 @@
+<div class="w-100 mt-3">
+    <div class="d-flex justify-content-evenly row row-cols-2 mx-1">
+        <div *ngFor="let item of pedido.itens" class="col text-center">
+            <img src="{{ item.produto?.imagem }}" alt="Produto" class="h-50">
+            <h1 class="p-4 fw-bold text-light">R{{ item.produto?.preco | currency}}</h1>
+            <p class="fw-semibold text-info">{{ item.produto?.nome }}</p>
+        </div>
+    </div>
+    
+    <img src="assets/bottom.png" alt="Base do encarte" class="img-fluid w-100">
+</div>
+
+<!-- 
 <body>
     <ul class="nav nav-tabs me-auto mb-2 mb-lg-0 mt-0 pt-0 bg-custom">
         <li class="nav-item">
@@ -82,3 +95,4 @@
         </div>
     </div>
 </body>
+-->

@@ -10,3 +10,14 @@
     color: #4D70BC !important;
     background-color: white !important;
 }
+
+h1 {
+    background-image: url("/assets/badge.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+span, p, h1 {
+    font-family: helvetica !important;
+}
