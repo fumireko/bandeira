@@ -16,6 +16,8 @@ import { EditarPedidoComponent } from './pedido/editar-pedido/editar-pedido.comp
 import { ListagemClienteComponent } from './cliente/listagem-cliente/listagem-cliente.component';
 import { PedidoClienteComponent } from './cliente/pedido-cliente/pedido-cliente.component';
 import { AutenticacaoComponent } from './cliente/autenticacao/autenticacao.component';
+import { GerarEncarteComponent } from './encarte/gerar-encarte/gerar-encarte.component';
+import { ProdutosEncarteComponent } from './encarte/produtos-encarte/produtos-encarte.component';
 
 
 @NgModule({
@@ -32,6 +34,8 @@ import { AutenticacaoComponent } from './cliente/autenticacao/autenticacao.compo
     ListagemClienteComponent,
     PedidoClienteComponent,
     AutenticacaoComponent,
+    GerarEncarteComponent,
+    ProdutosEncarteComponent,
   ],
   imports: [
     BrowserModule,

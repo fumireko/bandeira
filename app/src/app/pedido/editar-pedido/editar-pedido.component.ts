@@ -7,6 +7,7 @@ import { Pedido } from 'src/app/shared/models/pedido.model';
 import { Produto } from 'src/app/shared/models/produto.model';
 import { PedidoService } from 'src/app/shared/services/pedido.service';
 import { ProdutoService } from 'src/app/shared/services/produto.service';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-editar-pedido',
@@ -22,6 +23,7 @@ export class EditarPedidoComponent {
 
   public pedido: Pedido = new Pedido();
   public layout: string = "itens";
+  public siteURL: string = AppComponent.siteUrl;
   private id = this.route.snapshot.params['id'];
 
   constructor(

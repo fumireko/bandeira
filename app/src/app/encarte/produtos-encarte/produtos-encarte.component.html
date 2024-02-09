@@ -4,18 +4,26 @@
         <a class="nav-link mt-1 mx-1 " [routerLink]="['/pedidos']">Pedidos</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active mt-1 mx-1 " [routerLink]="['/produtos']">Produtos</a>
+        <a class="nav-link mt-1 mx-1 " [routerLink]="['/produtos']">Produtos</a>
     </li>
     <li class="nav-item">
         <a class="nav-link mt-1 mx-1 " [routerLink]="['/categorias']">Categorias</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link mt-1 mx-1 " [routerLink]="['/encartes/produtos']">Encartes</a>
+        <a class="nav-link active mt-1 mx-1 " [routerLink]="['/encartes/produtos']">Encartes</a>
     </li>
 </ul>    
 
 <body>
-    <h1 style="width: 70vw;" class="mx-auto text-start mt-3 fw-semibold">Listagem de Produtos</h1>
+    <div class="row mx-auto justify-content-between" style="width: 70vw;">
+        <h1 class="fw-semibold mx-0 mt-3 p-0 col-9">
+            Listagem de Produtos
+        </h1>    
+        <button class="btn btn-success mt-4 col-3 h-25 my-auto" [disabled]="selecionados.length === 0" (click)="gerarEncarte()">
+            <i class="fa-solid fa-layer-group"></i>
+            Gerar encarte
+        </button>
+    </div>
 
     <div class="row mx-auto" style="width: 70vw;">
         <div class="mb-3" style="width: 35vw;">
@@ -45,6 +53,7 @@
     <table class="table table-bordered table-hover mx-auto" style="width: 70vw;">
         <tbody>
             <tr class="text-center">
+                <th>Seleção</th>
                 <th (click)="alternarOrdem('id')">
                     Código
                     <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'id'"></i>
@@ -63,12 +72,6 @@
                     <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'nome' && ordemAscendente"></i>
                     <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'nome' && !ordemAscendente"></i>
                 </th>
-                <th (click)="alternarOrdem('categoria.descricao')">
-                    Categoria
-                    <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'categoria.descricao'"></i>
-                    <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'categoria.descricao' && ordemAscendente"></i>
-                    <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'categoria.descricao' && !ordemAscendente"></i>
-                </th>
                 <th (click)="alternarOrdem('preco')">
                     Preço
                     <i class="fas fa-sort" *ngIf="colunaOrdenacao !== 'preco'"></i>
@@ -81,34 +84,19 @@
                     <i class="fas fa-sort-up" *ngIf="colunaOrdenacao === 'disponivel' && ordemAscendente"></i>
                     <i class="fas fa-sort-down" *ngIf="colunaOrdenacao === 'disponivel' && !ordemAscendente"></i>
                 </th>
-                <th class="text-center">
-                    <a [routerLink]="['./inserir']" class="btn-success btn">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                    </a>
-                </th>
             </tr>
             <tr *ngFor="let produto of filtrados" class="text-center">
+              <td>
+                <input type="checkbox" [checked]="isSelected(produto)" (change)="toggleSelection(produto)">
+              </td>
               <td>{{produto.id}}</td>
               <td *ngIf="mostrarImagens">
                 <span class="text-danger fw-bold"><img *ngIf="produto.imagem" [src]="produto.imagem" alt="Imagem inválida" class="img-fluid w-50" loading="lazy"></span>
               </td>              
               <td class="text-start">{{produto.nome}}</td>
-              <td>{{produto.categoria?.descricao}}</td>
               <td>R{{produto.preco | currency }}</td>  
               <td [ngClass]="{'text-success': produto.disponivel, 'text-danger': !produto.disponivel}">
                 {{ produto.disponivel ? 'OK' : 'Indisponível' }}
-              </td>              
-              <td class="d-flex justify-content-evenly">
-                  <a [routerLink]="['./editar', produto.id]" class="btn-primary btn col-6 me-1">
-                      <i class="fa fa-edit" aria-hidden="true"></i>
-                  </a>
-                  <br>
-                  <a *ngIf="produto.disponivel" (click)="remover(produto)" class="btn-danger btn col-6">
-                      <i class="fa fa-trash-can" aria-hidden="true"></i>
-                  </a>
-                  <a *ngIf="!produto.disponivel" (click)="remover(produto)" class="btn-success btn col-6">
-                    <i class="fa fa-trash-can-arrow-up" aria-hidden="true"></i>
-                  </a>
               </td>
             </tr>
         </tbody>

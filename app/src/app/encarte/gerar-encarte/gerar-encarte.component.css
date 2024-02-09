@@ -1,0 +1,12 @@
+h1 {
+    background-image: url("/assets/badge.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+p { color: #028AC2 }
+
+span, p, h1 {
+    font-family: keepcalm !important;
+}

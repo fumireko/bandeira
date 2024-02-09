@@ -10,6 +10,8 @@ import { ListarPedidoComponent } from './pedido/listar-pedido/listar-pedido.comp
 import { ListagemClienteComponent } from './cliente/listagem-cliente/listagem-cliente.component';
 import { AutenticacaoComponent } from './cliente/autenticacao/autenticacao.component';
 import { EditarPedidoComponent } from './pedido/editar-pedido/editar-pedido.component';
+import { ProdutosEncarteComponent } from './encarte/produtos-encarte/produtos-encarte.component';
+import { GerarEncarteComponent } from './encarte/gerar-encarte/gerar-encarte.component';
 
 const routes: Routes = [
   {
@@ -43,6 +45,17 @@ const routes: Routes = [
   {
     path: 'pedidos/editar/:id',
     component: EditarPedidoComponent
+  },
+  {
+    path: 'encarte/produtos',
+    component: ProdutosEncarteComponent
+  },
+  {
+    path: 'encarte/gerar',
+    component: GerarEncarteComponent,
+    data: {
+      selecionados: [] // This is just a placeholder. Route data will be dynamically set.
+    }
   },
   {
     path: 'autenticacao',
