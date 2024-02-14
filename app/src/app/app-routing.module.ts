@@ -47,11 +47,11 @@ const routes: Routes = [
     component: EditarPedidoComponent
   },
   {
-    path: 'encarte/produtos',
+    path: 'encartes/produtos',
     component: ProdutosEncarteComponent
   },
   {
-    path: 'encarte/gerar',
+    path: 'encartes/gerar',
     component: GerarEncarteComponent,
     data: {
       selecionados: [] // This is just a placeholder. Route data will be dynamically set.

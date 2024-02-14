@@ -110,7 +110,7 @@ export class ProdutosEncarteComponent implements OnInit {
   }
 
   gerarEncarte() {
-    this.router.navigate(['encarte/gerar'], { state: { selecionados: this.selecionados } });
+    this.router.navigate(['encartes/gerar'], { state: { selecionados: this.selecionados } });
   }
 
   checkUndefined(e: any){
