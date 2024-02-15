@@ -29,6 +29,8 @@ export class GerarEncarteComponent {
     console.log(JSON.stringify(this.selecionados));
   } 
 
+  checkUndefined(a: any) { if(a) return a }
+
   async captureImage() {
     const element = document.getElementById('imagem');
     if (element) {

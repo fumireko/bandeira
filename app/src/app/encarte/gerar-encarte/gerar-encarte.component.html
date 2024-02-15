@@ -3,7 +3,7 @@
 
     <div class="d-flex justify-content-evenly row row-cols-2 mx-1">
         <div *ngFor="let item of selecionados" class="col text-center">
-            <img src="{{ siteURL }}/image_cors.php?url={{ item.imagem }}" alt="{{ item.nome }}" class="h-50">
+            <img src="{{ checkUndefined(item.imagem) }}" alt="{{ item.nome }}" class="h-50">
             <h1 class="p-3 fw-medium text-light">R{{ item.preco | currency}}</h1>
             <p class="fw-medium">{{ item.nome }}</p>
         </div>
