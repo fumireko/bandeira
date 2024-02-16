@@ -33,12 +33,12 @@ export class ListarProdutoComponent implements OnInit {
     this.mostrarImagens = opcoesTela.mostrarImagens;
     this.mostrarIndisponiveis = opcoesTela.mostrarIndisponiveis;
     this.termoBusca = opcoesTela.termoBusca;
-    
-    this.atualizarListagem();
 
     this.categoriaService.listarTodas().subscribe(categorias => {
       this.categorias = categorias;
     });
+
+    this.atualizarListagem();
   }
 
   filtrarProdutos() {
@@ -79,14 +79,12 @@ export class ListarProdutoComponent implements OnInit {
 
   atualizarListagem() {
     if (this.mostrarIndisponiveis) {
-      // Se a checkbox estiver marcada, listar todos os produtos
       this.gerarListagem().subscribe(produtos => {
         this.produtos = this.filtrados = produtos;
         this.ordenarProdutos();
         this.filtrarProdutos();
       });
     } else {
-      // Se a checkbox estiver desmarcada, listar apenas os produtos ativos
       this.gerarListagemAtivos().subscribe(produtos => {
         this.produtos = this.filtrados = produtos;
         this.ordenarProdutos();
