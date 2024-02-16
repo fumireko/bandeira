@@ -20,26 +20,54 @@
               {{categoria.descricao}}
             </button>
           </h2>
-          <div [id]="'collapse' + categoria.id" class="accordion-collapse collapse hide" data-bs-parent="#accordion">
-            <div class="accordion-body row row-cols-2 row-cols-md-6 g-3">
-              <div class="col card" *ngFor="let produto of produtosCategoria[checkUndefined(categoria.id)]">
-                <img src="{{produto.imagem}}" class="card-img-top img-fluid" loading="lazy">
-                <h1 class="card-title fw-bold text-center">R{{produto.preco | currency}}</h1>
-                <div class="px-2 mb-3">
-                  <p class="card-text text-center fs-5">{{produto.nome}}</p>
-                  <p *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="fw-bold">{{ getQuantidade(produto) }} itens selecionados</p>
-                </div>
-                <div class="card-footer d-flex justify-content-center">
-                  <button class="btn btn-primary" (click)="adicionar(produto)">
-                    <i class="fa-solid fa-basket-shopping"></i> Adicionar
-                  </button>
-                  <button *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="btn btn-danger" (click)="remover(produto)">
-                    <i class="fa-solid fa-trash"></i> Remover
-                  </button>
+          <ng-container *ngIf="categoria.id === 1; else hideCollapse">
+            <div [id]="'collapse' + categoria.id" class="accordion-collapse collapse show" data-bs-parent="#accordion">
+              <div class="accordion-body scrollspy">
+                <div class="card" *ngFor="let produto of produtosCategoria[checkUndefined(categoria.id)]">
+                  <div class="card-body d-flex flex-column m-0 p-0">
+                    <img src="{{produto.imagem}}" class="card-img-top img-fluid" loading="lazy">
+                    <h1 class="card-title fw-bold text-center mb-0">R{{produto.preco | currency}}</h1>
+                    <div class="px-2 mb-2">
+                      <p class="card-text text-center">{{produto.nome}}</p>
+                      <p *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="fw-bold">{{ getQuantidade(produto) }} itens selecionados</p>
+                    </div>
+                  </div>
+                  <div class="card-footer d-flex justify-content-center">
+                    <button class="btn btn-primary btn-sm" (click)="adicionar(produto)">
+                      <i class="fa-solid fa-basket-shopping"></i> Adicionar
+                    </button>
+                    <button *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="btn btn-danger btn-sm" (click)="remover(produto)">
+                      <i class="fa-solid fa-trash"></i> Remover
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </ng-container>
+          <ng-template #hideCollapse>
+            <div [id]="'collapse' + categoria.id" class="accordion-collapse collapse hide" data-bs-parent="#accordion">
+              <div class="accordion-body scrollspy">
+                <div class="card" *ngFor="let produto of produtosCategoria[checkUndefined(categoria.id)]">
+                  <div class="card-body d-flex flex-column m-0 p-0">
+                    <img src="{{produto.imagem}}" class="card-img-top img-fluid" loading="lazy">
+                    <h1 class="card-title fw-bold text-center mb-0">R{{produto.preco | currency}}</h1>
+                    <div class="px-2 mb-2">
+                      <p class="card-text text-center">{{produto.nome}}</p>
+                      <p *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="fw-bold">{{ getQuantidade(produto) }} itens selecionados</p>
+                    </div>
+                  </div>
+                  <div class="card-footer d-flex justify-content-center">
+                    <button class="btn btn-primary btn-sm" (click)="adicionar(produto)">
+                      <i class="fa-solid fa-basket-shopping"></i> Adicionar
+                    </button>
+                    <button *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="btn btn-danger btn-sm" (click)="remover(produto)">
+                      <i class="fa-solid fa-trash"></i> Remover
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
         </div>
         <div *ngFor="let categoria of categoriasPeso" class="accordion-item">
           <h2 class="accordion-header">
@@ -48,15 +76,17 @@
             </button>
           </h2>
           <div [id]="'collapse' + categoria.id" class="accordion-collapse collapse hide" data-bs-parent="#accordion">
-            <div class="accordion-body row row-cols-2 row-cols-md-6 g-3">
-              <div class="col card" *ngFor="let produto of produtosCategoria[checkUndefined(categoria.id)]">
-                <img src="{{produto.imagem}}" class="card-img-top img-fluid" loading="lazy">
-                <h1 class="card-title fw-bold text-center">R{{produto.preco | currency}}</h1>
-                <div class="px-2 mb-3">
-                  <p class="card-text text-center fs-5">{{produto.nome}}</p>
+            <div class="accordion-body scrollspy">
+              <div class="card" *ngFor="let produto of produtosCategoria[checkUndefined(categoria.id)]">
+                <div class="card-body d-flex flex-column m-0 p-0">
+                  <img src="{{produto.imagem}}" class="card-img-top img-fluid" loading="lazy">
+                  <h1 class="card-title fw-bold text-center">R{{produto.preco | currency}}</h1>
+                  <div class="px-2 mb-3">
+                    <p class="card-text text-center">{{produto.nome}}</p>
+                  </div>
                 </div>
-                <div class="card-footer d-flex justify-content-center m-1 p-1">
-                  <button *ngIf="checkUndefined(getQuantidade(produto)) == undefined" class="btn btn-primary" (click)="adicionarPeso(produto)">
+                <div class="card-footer d-flex justify-content-center">
+                  <button *ngIf="checkUndefined(getQuantidade(produto)) == undefined" class="btn btn-primary btn-sm" (click)="adicionarPeso(produto)">
                     <i class="fa-solid fa-basket-shopping"></i> Adicionar
                   </button>
                   <div *ngIf="checkUndefined(getQuantidade(produto)) > 0" class="input-group input-group-sm area-input-group-cart">

@@ -39,3 +39,23 @@
   font-size: .875rem !important;
   border-radius: .2rem !important;
 }
+
+.scrollspy {
+    overflow-x: scroll !important;
+    white-space: nowrap !important;
+}
+
+.card {
+    display: inline-block !important;
+}
+
+.card-text {
+    max-width: none;
+    white-space: normal;
+    overflow: hidden;
+}
+
+.card-img-top {
+    object-fit: cover;
+    height: 300px;
+}
