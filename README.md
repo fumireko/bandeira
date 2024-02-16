@@ -16,7 +16,7 @@ npm i --save-dev @types/dom-to-image
 ```
 
 ### Testes
-```
+```bash
 # Rodar o servidor na porta 8080
 ng serve -- --host 0.0.0.0 --port 8080 --disable-host-check  
 ```
