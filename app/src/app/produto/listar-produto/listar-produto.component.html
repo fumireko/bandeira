@@ -21,12 +21,12 @@
         <div class="mb-3" style="width: 35vw;">
             <div class="row">
                 <div class="form-check m-0 pt-3 col-6">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="mostrarImagens">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="mostrarImagens" (change)="atualizarOpcoesTela()">
                     <label class="form-check-label">Exibir Imagens</label>
                 </div>
     
                 <div class="form-check m-0 pt-3 col-6">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="mostrarIndisponiveis" (change)="atualizarListagem()">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="mostrarIndisponiveis" (change)="atualizarOpcoesTela()">
                     <label class="form-check-label">Mostrar indisponíveis</label>
                 </div>
             </div>
@@ -34,7 +34,7 @@
     
         <div class="mb-3 input-group" style="width: 35vw;">
             <input type="text" class="form-control mt-2" style="width: 67%" placeholder="Buscar produtos"
-            [(ngModel)]="termoBusca" (input)="filtrarProdutos()">
+            [(ngModel)]="termoBusca" (input)="filtrarProdutos(); atualizarOpcoesTela()">
             <select class="form-select mt-2" id="categoria" name="categoria" style="width: 33%" [(ngModel)]="categoriaDescricao" (change)="filtrarProdutos()">
                 <option value="">Todas as categorias</option>
                 <option *ngFor="let categoria of categorias" [value]="categoria.descricao">{{categoria.descricao}}</option>

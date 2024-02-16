@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Categoria } from 'src/app/shared/models/categoria.model';
 import { Produto } from 'src/app/shared/models/produto.model';
+import { CacheService } from 'src/app/shared/services/cache.service';
 import { CategoriaService } from 'src/app/shared/services/categoria.service';
 import { ProdutoService } from 'src/app/shared/services/produto.service';
 
@@ -24,11 +25,17 @@ export class ListarProdutoComponent implements OnInit {
 
   constructor(private produtoService: ProdutoService,
               private router: Router,
-              private categoriaService: CategoriaService) {}
+              private categoriaService: CategoriaService,
+              private cacheService: CacheService) {}
 
   ngOnInit() {
-    this.atualizarListagem();
+    const opcoesTela = this.cacheService.getOpcoesListarProdutos();
+    this.mostrarImagens = opcoesTela.mostrarImagens;
+    this.mostrarIndisponiveis = opcoesTela.mostrarIndisponiveis;
+    this.termoBusca = opcoesTela.termoBusca;
     
+    this.atualizarListagem();
+
     this.categoriaService.listarTodas().subscribe(categorias => {
       this.categorias = categorias;
     });
@@ -86,6 +93,15 @@ export class ListarProdutoComponent implements OnInit {
         this.filtrarProdutos();
       });
     }
+  }
+
+  atualizarOpcoesTela() {
+    const opcoesTela = {
+      mostrarImagens: this.mostrarImagens,
+      mostrarIndisponiveis: this.mostrarIndisponiveis,
+      termoBusca: this.termoBusca
+    };
+    this.cacheService.setOpcoesListarProdutos(opcoesTela);
   }
 
   remover(produto: Produto) {
