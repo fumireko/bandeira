@@ -35,7 +35,7 @@ export class ProdutoService {
   }  
 
   listarAtivos(categoria_id?: number): Observable<Produto[]> {
-    let url = `${AppComponent.backendURL}/produtos/ativos/`;
+    let url = `${AppComponent.backendURL}/produtos/ativos`;
     if (categoria_id !== undefined)
       url += `?categoria=${categoria_id}`;
       
